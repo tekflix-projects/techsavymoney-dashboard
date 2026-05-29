@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Credit Card Payoff Calculator — TechSavyMoney</title>
+  <meta name="description" content="Enter your income and expenses to see exactly how fast you can pay off your credit card and how much interest you'll save." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">TechSavy<span>Money</span></a>
+      <div class="nav-links">
+        <a href="net-worth.html">Net Worth</a>
+        <a href="budget.html">Budget</a>
+        <a href="debt-payoff.html">Debt Payoff</a>
+        <a href="credit-card.html" class="active">CC Payoff</a>
+        <a href="spending-simulator.html">Simulator</a>
+        <a href="index.html#get-access" class="nav-cta">Get Free Access</a>
+      </div>
+      <button class="nav-toggle" onclick="toggleNav()" aria-label="Toggle menu">&#9776;</button>
+    </div>
+    <div class="nav-mobile" id="mobileNav">
+      <a href="net-worth.html">Net Worth</a>
+      <a href="budget.html">Budget Breakdown</a>
+      <a href="debt-payoff.html">Debt Payoff</a>
+      <a href="credit-card.html">CC Payoff</a>
+      <a href="spending-simulator.html">Spending Simulator</a>
+    </div>
+  </nav>
+
+  <main class="tool-page">
+    <div class="container">
+
+      <div class="tool-header">
+        <div style="margin-bottom:0.5rem;">
+          <a href="index.html" style="color:var(--text-muted); font-size:0.875rem;">← All Tools</a>
+        </div>
+        <h1>Credit Card Payoff Calculator</h1>
+        <p>Enter your income, monthly expenses, and credit card details. See exactly how fast you can pay it off — and how much interest you'll save by putting your surplus toward the card.</p>
+      </div>
+
+      <div class="tool-layout">
+
+        <!-- ── Left: Inputs ── -->
+        <div class="panel">
+
+          <!-- Income -->
+          <div class="card">
+            <div class="card-header"><h3>&#128181; Monthly Income</h3></div>
+            <div class="card-body">
+              <div class="form-group" style="margin-bottom:0;">
+                <label>Monthly Take-Home Pay</label>
+                <div class="input-prefix"><span>$</span>
+                  <input type="number" id="income" placeholder="0" min="0" oninput="update()" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Expenses -->
+          <div class="card">
+            <div class="card-header"><h3>&#128179; Monthly Expenses</h3></div>
+            <div class="card-body">
+              <p style="font-size:0.875rem; margin-bottom:1.25rem;">Enter only what applies to you — leave the rest blank.</p>
+
+              <div class="form-group">
+                <label>Housing — Rent or Mortgage</label>
+                <div class="input-prefix"><span>$</span>
+                  <input type="number" id="exp-housing" placeholder="0" min="0" oninput="update()" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Utilities</label>
+                <div class="input-prefix"><span>$</span>
+                  <input type="number" id="exp-utilities" placeholder="0" min="0" oninput="update()" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Groceries &amp; Food</label>
+                <div class="input-prefix"><span>$</span>
+                  <input type="number" id="exp-food" placeholder="0" min="0" oninput="update()" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Transportation</label>
+                <div class="input-prefix"><span>$</span>
+                  <input type="number" id="exp-transport" placeholder="0" min="0" oninput="update()" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Subscriptions &amp; Bills</label>
+                <div class="input-prefix"><span>$</span>
+                  <input type="number" id="exp-subscriptions" placeholder="0" min="0" oninput="update()" />
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom:1.25rem;">
+                <label>Other</label>
+                <div class="input-prefix"><span>$</span>
+                  <input type="number" id="exp-other" placeholder="0" min="0" oninput="update()" />
+                </div>
+              </div>
+
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:0.75rem 1rem; background:var(--surface-2); border-radius:var(--radius-sm); border:1px solid var(--border);">
+                <span style="font-size:0.8125rem; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em;">Total Expenses</span>
+                <span id="expenses-total" style="font-size:1.125rem; font-weight:800; color:var(--navy);">$0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CC Details -->
+          <div class="card">
+            <div class="card-header"><h3>&#128179; Credit Card Details</h3></div>
+            <div class="card-body">
+              <div class="form-group">
+                <label>Current Balance</label>
+                <div class="input-prefix"><span>$</span>
+                  <input type="number" id="cc-balance" placeholder="0" min="0" oninput="update()" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Annual Interest Rate (APR)</label>
+                <div class="input-suffix">
+                  <input type="number" id="cc-apr" placeholder="20" min="0" max="100" step="0.1" value="20" oninput="update()" />
+                  <span>%</span>
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label>Current Minimum Payment</label>
+                <div class="input-prefix"><span>$</span>
+                  <input type="number" id="cc-min" placeholder="25" min="1" value="25" oninput="update()" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="disclaimer">
+            <strong>For educational purposes only.</strong> Results are estimates based on a fixed monthly payment. Actual results vary based on minimum payment recalculations, fees, and other factors. Not financial advice.
+          </div>
+
+        </div>
+
+        <!-- ── Right: Results ── -->
+        <div class="panel">
+
+          <!-- Budget summary row — shown only when income is entered -->
+          <div id="budget-summary" class="hidden">
+            <div class="grid-3">
+              <div class="stat-card">
+                <div class="stat-label">Monthly Income</div>
+                <div class="stat-value stat-neutral" id="stat-income">$0</div>
+                <div class="stat-meta">Take-home</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Total Expenses</div>
+                <div class="stat-value stat-neutral" id="stat-expenses">$0</div>
+                <div class="stat-meta">Monthly bills</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Monthly Surplus</div>
+                <div class="stat-value stat-positive" id="stat-surplus">$0</div>
+                <div class="stat-meta">Available for CC</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty state -->
+          <div id="results-empty" class="card">
+            <div class="card-body empty-state">
+              <div class="icon">&#128179;</div>
+              <p>Enter your credit card balance and APR to see your payoff plan</p>
+            </div>
+          </div>
+
+          <!-- Results -->
+          <div id="results-area" class="hidden">
+
+            <!-- Payoff comparison -->
+            <div class="card">
+              <div class="card-header">
+                <h3>Payoff Comparison</h3>
+                <span class="badge badge-teal">See your options</span>
+              </div>
+              <div class="card-body">
+                <div class="comparison">
+
+                  <!-- Minimum payment scenario -->
+                  <div class="method-card" id="min-card">
+                    <h4>&#128338; Minimum Only</h4>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Just the required minimum each month. Costs the most in interest over time.</p>
+                    <div class="method-stat">
+                      <div class="label">Monthly Payment</div>
+                      <div class="value" id="min-pay-display">—</div>
+                    </div>
+                    <div class="method-stat">
+                      <div class="label">Payoff Time</div>
+                      <div class="value" id="min-months">—</div>
+                    </div>
+                    <div class="method-stat">
+                      <div class="label">Total Interest</div>
+                      <div class="value" id="min-interest">—</div>
+                    </div>
+                    <div class="method-stat">
+                      <div class="label">Debt-Free Date</div>
+                      <div class="value" id="min-date">—</div>
+                    </div>
+                  </div>
+
+                  <!-- Recommended / max payoff scenario -->
+                  <div class="method-card" id="rec-card">
+                    <div class="winner-badge hidden" id="rec-winner-badge">Best approach</div>
+                    <h4>&#128640; Max Payoff</h4>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Put your full monthly surplus toward the card. Pay it off faster and save on interest.</p>
+                    <div class="method-stat">
+                      <div class="label">Monthly Payment</div>
+                      <div class="value" id="rec-pay-display">—</div>
+                    </div>
+                    <div class="method-stat">
+                      <div class="label">Payoff Time</div>
+                      <div class="value" id="rec-months">—</div>
+                    </div>
+                    <div class="method-stat">
+                      <div class="label">Total Interest</div>
+                      <div class="value" id="rec-interest">—</div>
+                    </div>
+                    <div class="method-stat">
+                      <div class="label">Debt-Free Date</div>
+                      <div class="value" id="rec-date">—</div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Insight callout -->
+                <div id="payoff-insight" style="margin-top:1rem; padding:0.875rem 1.125rem; border-radius:var(--radius-sm); font-size:0.875rem; line-height:1.55;"></div>
+
+              </div>
+            </div>
+
+            <!-- Chart -->
+            <div class="card hidden" id="chart-card">
+              <div class="card-header"><h3>Balance Over Time</h3></div>
+              <div class="card-body">
+                <div class="chart-wrap">
+                  <canvas id="cc-chart"></canvas>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="index.html" class="footer-logo">TechSavy<span>Money</span></a>
+        <div class="footer-links">
+          <a href="net-worth.html">Net Worth</a>
+          <a href="budget.html">Budget</a>
+          <a href="debt-payoff.html">Debt Payoff</a>
+          <a href="credit-card.html">CC Payoff</a>
+          <a href="spending-simulator.html">Simulator</a>
+        </div>
+        <p class="footer-copy">For educational purposes only. Not financial advice.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/credit-card.js"></script>
+  <script src="js/feedback.js"></script>
+  <script>function toggleNav() { document.getElementById('mobileNav').classList.toggle('open'); }</script>
+</body>
+</html>

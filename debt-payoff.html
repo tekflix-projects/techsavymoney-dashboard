@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Debt Payoff Visualizer — TechSavyMoney</title>
+  <meta name="description" content="Compare the Avalanche vs. Snowball debt payoff methods. See exactly when you'll be debt-free and how much interest you'll save." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">TechSavy<span>Money</span></a>
+      <div class="nav-links">
+        <a href="net-worth.html">Net Worth</a>
+        <a href="budget.html">Budget</a>
+        <a href="debt-payoff.html" class="active">Debt Payoff</a>
+        <a href="credit-card.html">CC Payoff</a>
+        <a href="spending-simulator.html">Simulator</a>
+        <a href="index.html#get-access" class="nav-cta">Get Free Access</a>
+      </div>
+      <button class="nav-toggle" onclick="toggleNav()" aria-label="Toggle menu">&#9776;</button>
+    </div>
+    <div class="nav-mobile" id="mobileNav">
+      <a href="net-worth.html">Net Worth</a>
+      <a href="budget.html">Budget Breakdown</a>
+      <a href="debt-payoff.html">Debt Payoff</a>
+      <a href="credit-card.html">CC Payoff</a>
+      <a href="spending-simulator.html">Spending Simulator</a>
+    </div>
+  </nav>
+
+  <main class="tool-page">
+    <div class="container">
+
+      <div class="tool-header">
+        <div style="margin-bottom:0.5rem;">
+          <a href="index.html" style="color:var(--text-muted); font-size:0.875rem;">← All Tools</a>
+        </div>
+        <h1>Debt Payoff Visualizer</h1>
+        <p>Enter your debts and see the fastest path to debt freedom. Compare the Avalanche and Snowball methods side by side.</p>
+      </div>
+
+      <div class="tool-layout">
+
+        <!-- ── Left: Inputs ── -->
+        <div class="panel">
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Your Debts</h3>
+              <button class="btn btn-sm btn-secondary" onclick="addDebt()">+ Add Debt</button>
+            </div>
+            <div class="card-body">
+              <div id="debtList"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><h3>⚡ Extra Monthly Payment</h3></div>
+            <div class="card-body">
+              <p style="font-size:0.875rem; margin-bottom:1rem;">Any extra money you can put toward debt each month — beyond your minimums. Even a small amount makes a real difference.</p>
+              <div class="form-group">
+                <label>Extra Monthly Payment</label>
+                <div class="input-prefix"><span>$</span><input type="number" id="extraPayment" placeholder="0" min="0" value="0" oninput="update()" /></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="disclaimer">
+            <strong>For educational purposes only.</strong> Calculations are estimates based on the numbers you provide. Actual payoff timelines may vary based on minimum payment changes, fees, or other factors. Consult a financial professional for personalized guidance.
+          </div>
+
+        </div>
+
+        <!-- ── Right: Results ── -->
+        <div class="panel">
+
+          <div id="resultsEmpty" class="card">
+            <div class="card-body empty-state">
+              <div class="icon">📉</div>
+              <p>Add at least one debt to see your payoff plan</p>
+            </div>
+          </div>
+
+          <div id="resultsArea" class="hidden">
+
+            <!-- Summary Stats -->
+            <div class="grid-2">
+              <div class="stat-card">
+                <div class="stat-label">Total Debt</div>
+                <div class="stat-value stat-negative" id="totalDebtDisplay">$0</div>
+                <div class="stat-meta">Combined balance</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Min. Monthly Payments</div>
+                <div class="stat-value stat-neutral" id="totalMinDisplay">$0</div>
+                <div class="stat-meta">Per month minimum</div>
+              </div>
+            </div>
+
+            <!-- Method Comparison -->
+            <div class="card">
+              <div class="card-header">
+                <h3>Method Comparison</h3>
+                <span id="winnerBadge" class="badge badge-teal"></span>
+              </div>
+              <div class="card-body">
+                <div class="comparison">
+                  <div class="method-card" id="avalancheCard">
+                    <div class="winner-badge hidden" id="avalancheWinner">Best for saving money</div>
+                    <h4>🏔️ Avalanche</h4>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Pay highest interest rate first. Mathematically optimal — saves the most money.</p>
+                    <div class="method-stat">
+                      <div class="label">Payoff Time</div>
+                      <div class="value" id="avalancheMonths">—</div>
+                    </div>
+                    <div class="method-stat">
+                      <div class="label">Total Interest Paid</div>
+                      <div class="value" id="avalancheInterest">—</div>
+                    </div>
+                    <div class="method-stat">
+                      <div class="label">Debt-Free Date</div>
+                      <div class="value" id="avalancheDate">—</div>
+                    </div>
+                  </div>
+                  <div class="method-card" id="snowballCard">
+                    <div class="winner-badge hidden" id="snowballWinner">Best for motivation</div>
+                    <h4>❄️ Snowball</h4>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Pay lowest balance first. Builds momentum with quick wins — great for motivation.</p>
+                    <div class="method-stat">
+                      <div class="label">Payoff Time</div>
+                      <div class="value" id="snowballMonths">—</div>
+                    </div>
+                    <div class="method-stat">
+                      <div class="label">Total Interest Paid</div>
+                      <div class="value" id="snowballInterest">—</div>
+                    </div>
+                    <div class="method-stat">
+                      <div class="label">Debt-Free Date</div>
+                      <div class="value" id="snowballDate">—</div>
+                    </div>
+                  </div>
+                </div>
+                <div id="interestSavings" style="margin-top:1rem; padding:0.875rem; background:var(--teal-light); border-radius:var(--radius-sm); font-size:0.875rem; color:#005A52;"></div>
+              </div>
+            </div>
+
+            <!-- Payoff Timeline Chart -->
+            <div class="card">
+              <div class="card-header"><h3>Payoff Timeline</h3></div>
+              <div class="card-body">
+                <div class="chart-wrap">
+                  <canvas id="debtChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Debt Breakdown -->
+            <div class="card">
+              <div class="card-header"><h3>Your Debts at a Glance</h3></div>
+              <div class="card-body" id="debtSummaryTable"></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="index.html" class="footer-logo">TechSavy<span>Money</span></a>
+        <div class="footer-links">
+          <a href="net-worth.html">Net Worth</a>
+          <a href="budget.html">Budget</a>
+          <a href="debt-payoff.html">Debt Payoff</a>
+          <a href="credit-card.html">CC Payoff</a>
+          <a href="spending-simulator.html">Simulator</a>
+        </div>
+        <p class="footer-copy">For educational purposes only. Not financial advice.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/debt-payoff.js"></script>
+  <script src="js/feedback.js"></script>
+  <script>function toggleNav() { document.getElementById('mobileNav').classList.toggle('open'); }</script>
+</body>
+</html>

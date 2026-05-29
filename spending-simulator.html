@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spending Simulator — TechSavyMoney</title>
+  <meta name="description" content="See how small, consistent spending changes compound into big savings over 1, 5, 10, and 20 years." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">TechSavy<span>Money</span></a>
+      <div class="nav-links">
+        <a href="net-worth.html">Net Worth</a>
+        <a href="budget.html">Budget</a>
+        <a href="debt-payoff.html">Debt Payoff</a>
+        <a href="credit-card.html">CC Payoff</a>
+        <a href="spending-simulator.html" class="active">Simulator</a>
+        <a href="index.html#get-access" class="nav-cta">Get Free Access</a>
+      </div>
+      <button class="nav-toggle" onclick="toggleNav()" aria-label="Toggle menu">&#9776;</button>
+    </div>
+    <div class="nav-mobile" id="mobileNav">
+      <a href="net-worth.html">Net Worth</a>
+      <a href="budget.html">Budget Breakdown</a>
+      <a href="debt-payoff.html">Debt Payoff</a>
+      <a href="credit-card.html">CC Payoff</a>
+      <a href="spending-simulator.html">Spending Simulator</a>
+    </div>
+  </nav>
+
+  <main class="tool-page">
+    <div class="container">
+
+      <div class="tool-header">
+        <div style="margin-bottom:0.5rem;">
+          <a href="index.html" style="color:var(--text-muted); font-size:0.875rem;">← All Tools</a>
+        </div>
+        <h1>Spending Simulator</h1>
+        <p>What would happen if you cut one spending habit and invested the savings? Small, consistent changes can compound into life-changing amounts over time.</p>
+      </div>
+
+      <div class="tool-layout">
+
+        <!-- ── Left: Inputs ── -->
+        <div class="panel">
+
+          <div class="card">
+            <div class="card-header"><h3>🎯 The Spending Change</h3></div>
+            <div class="card-body">
+              <div class="form-group">
+                <label>What are you changing?</label>
+                <input type="text" id="categoryName" placeholder="e.g. Daily coffee, dining out, subscriptions" oninput="update()" value="Daily Coffee" />
+              </div>
+              <div class="form-group">
+                <label>Current Monthly Spend on This</label>
+                <div class="input-prefix"><span>$</span><input type="number" id="currentSpend" placeholder="0" min="0" value="150" oninput="update()" /></div>
+              </div>
+              <div class="form-group">
+                <label>New Monthly Spend (after change)</label>
+                <div class="input-prefix"><span>$</span><input type="number" id="newSpend" placeholder="0" min="0" value="50" oninput="update()" /></div>
+              </div>
+
+              <!-- Monthly Savings Preview -->
+              <div id="savingsPreview" style="background:var(--teal-light); border-radius:var(--radius-sm); padding:1rem; margin-top:0.5rem; display:flex; align-items:center; justify-content:space-between;">
+                <span style="font-size:0.875rem; color:#005A52; font-weight:500;">Monthly savings redirected:</span>
+                <span id="monthlySavingsAmt" style="font-size:1.375rem; font-weight:800; color:var(--teal);">$100</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><h3>📈 Investment Growth Assumptions</h3></div>
+            <div class="card-body">
+              <p style="font-size:0.875rem; margin-bottom:1.25rem; color:var(--text-muted);">If you invest the monthly savings, how much could it grow? Adjust the assumed annual return below.</p>
+
+              <div class="form-group">
+                <label>Expected Annual Return</label>
+                <div class="range-wrapper">
+                  <input type="range" id="returnRate" min="1" max="15" step="0.5" value="7" oninput="update()" />
+                  <span class="range-value" id="returnRateDisplay">7%</span>
+                </div>
+              </div>
+              <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.5rem;">
+                Common benchmarks: <strong>4–5%</strong> (conservative / bonds), <strong>7%</strong> (S&amp;P 500 historical avg, inflation-adjusted), <strong>10%</strong> (nominal S&amp;P 500 avg).
+              </p>
+
+              <div style="height:1px; background:var(--border); margin: 1.25rem 0;"></div>
+
+              <div class="form-group">
+                <label>Comparison: What if you paid off debt instead?</label>
+                <div class="input-suffix">
+                  <input type="number" id="debtRate" placeholder="e.g. 19.99" min="0" max="100" step="0.1" value="19.99" oninput="update()" />
+                  <span>%</span>
+                </div>
+              </div>
+              <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.25rem;">Enter your highest debt interest rate to see guaranteed savings from debt payoff.</p>
+            </div>
+          </div>
+
+          <!-- Quick Scenarios -->
+          <div class="card">
+            <div class="card-header"><h3>⚡ Quick Scenarios</h3></div>
+            <div class="card-body">
+              <p style="font-size:0.875rem; margin-bottom:1rem; color:var(--text-muted);">Try these common spending changes:</p>
+              <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
+                <button class="btn btn-secondary btn-sm" onclick="loadScenario('Daily Coffee', 150, 30)">☕ Daily Coffee</button>
+                <button class="btn btn-secondary btn-sm" onclick="loadScenario('Dining Out', 400, 150)">🍔 Dining Out</button>
+                <button class="btn btn-secondary btn-sm" onclick="loadScenario('Streaming & Apps', 80, 20)">📱 Subscriptions</button>
+                <button class="btn btn-secondary btn-sm" onclick="loadScenario('Shopping / Impulse', 200, 75)">🛍️ Shopping</button>
+                <button class="btn btn-secondary btn-sm" onclick="loadScenario('Rideshare', 120, 40)">🚗 Rideshare</button>
+                <button class="btn btn-secondary btn-sm" onclick="loadScenario('Alcohol & Bars', 180, 50)">🍺 Drinks</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="disclaimer">
+            <strong>For educational purposes only.</strong> Projected growth figures are illustrative estimates based on assumed rates of return and consistent monthly contributions. Actual investment returns vary and are not guaranteed. Past performance does not predict future results. Consult a qualified financial professional before making investment decisions.
+            <br><br>
+            <em>[NOTE: Projections use compound interest: FV = PMT × ((1 + r)^n − 1) / r. All assumptions (rate, timeframe, contributions) are user-defined.]</em>
+          </div>
+
+        </div>
+
+        <!-- ── Right: Results ── -->
+        <div class="panel">
+
+          <!-- Big Number -->
+          <div class="card" style="background: linear-gradient(135deg, var(--navy), var(--navy-light));">
+            <div class="card-body text-center" style="padding: 2.5rem;">
+              <p style="color: rgba(255,255,255,0.65); font-size:0.875rem; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.75rem;">20-Year Projected Value</p>
+              <div id="bigNumber" style="font-size: 3.25rem; font-weight: 800; color: var(--teal); letter-spacing: -1px; line-height:1;">$0</div>
+              <p id="bigNumberSub" style="color: rgba(255,255,255,0.55); font-size: 0.9rem; margin-top: 0.75rem;">from <span id="categoryLabel">your spending change</span></p>
+            </div>
+          </div>
+
+          <!-- Timeline Cards -->
+          <div class="card">
+            <div class="card-header"><h3>Growth at a Glance</h3></div>
+            <div class="card-body">
+              <div class="sim-timeline">
+                <div class="timeline-card">
+                  <div class="timeline-year">1 Year</div>
+                  <div class="timeline-amount" id="yr1">$0</div>
+                  <div class="timeline-saved" id="yr1contrib">$0 saved</div>
+                </div>
+                <div class="timeline-card">
+                  <div class="timeline-year">5 Years</div>
+                  <div class="timeline-amount" id="yr5">$0</div>
+                  <div class="timeline-saved" id="yr5contrib">$0 saved</div>
+                </div>
+                <div class="timeline-card">
+                  <div class="timeline-year">10 Years</div>
+                  <div class="timeline-amount" id="yr10">$0</div>
+                  <div class="timeline-saved" id="yr10contrib">$0 saved</div>
+                </div>
+                <div class="timeline-card">
+                  <div class="timeline-year">20 Years</div>
+                  <div class="timeline-amount" id="yr20">$0</div>
+                  <div class="timeline-saved" id="yr20contrib">$0 saved</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chart -->
+          <div class="card">
+            <div class="card-header"><h3>Growth Projection</h3></div>
+            <div class="card-body">
+              <div class="chart-wrap">
+                <canvas id="simChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Invest vs. Debt Payoff -->
+          <div class="card">
+            <div class="card-header"><h3>Invest vs. Pay Off Debt</h3></div>
+            <div class="card-body" id="debtVsInvest"></div>
+          </div>
+
+          <!-- Real-World Context -->
+          <div class="card">
+            <div class="card-header"><h3>💡 What This Could Buy</h3></div>
+            <div class="card-body" id="realWorldContext"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="index.html" class="footer-logo">TechSavy<span>Money</span></a>
+        <div class="footer-links">
+          <a href="net-worth.html">Net Worth</a>
+          <a href="budget.html">Budget</a>
+          <a href="debt-payoff.html">Debt Payoff</a>
+          <a href="credit-card.html">CC Payoff</a>
+          <a href="spending-simulator.html">Simulator</a>
+        </div>
+        <p class="footer-copy">For educational purposes only. Not financial advice.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/spending-simulator.js"></script>
+  <script src="js/feedback.js"></script>
+  <script>function toggleNav() { document.getElementById('mobileNav').classList.toggle('open'); }</script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TechSavyMoney — Your Complete Financial Picture</title>
+  <meta name="description" content="Free personal finance tools to visualize your net worth, budget, debt payoff plan, and the impact of small spending changes." />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ── Navbar ── -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">TechSavy<span>Money</span></a>
+      <div class="nav-links">
+        <a href="net-worth.html">Net Worth</a>
+        <a href="budget.html">Budget</a>
+        <a href="debt-payoff.html">Debt Payoff</a>
+        <a href="credit-card.html">CC Payoff</a>
+        <a href="spending-simulator.html">Simulator</a>
+        <a href="#get-access" class="nav-cta">Get Free Access</a>
+      </div>
+      <button class="nav-toggle" onclick="toggleNav()" aria-label="Toggle menu">&#9776;</button>
+    </div>
+    <div class="nav-mobile" id="mobileNav">
+      <a href="net-worth.html">Net Worth</a>
+      <a href="budget.html">Budget Breakdown</a>
+      <a href="debt-payoff.html">Debt Payoff</a>
+      <a href="credit-card.html">CC Payoff</a>
+      <a href="spending-simulator.html">Spending Simulator</a>
+      <a href="#get-access" style="color: var(--teal); font-weight: 700;">Get Free Access →</a>
+    </div>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content fade-up">
+        <div class="hero-badge">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          100% Free · No Login · No Data Stored
+        </div>
+        <h1>See Your Complete <span>Financial Picture</span></h1>
+        <p>Plug in your numbers and instantly see where you stand, where your money goes, and how small changes can make a big difference over time.</p>
+        <div class="hero-actions">
+          <a href="net-worth.html" class="btn btn-primary btn-lg">
+            Get Started — It's Free
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+          <a href="#tools" class="btn btn-secondary btn-lg" style="background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.2);">See the Tools</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Tools ── -->
+  <section class="tools-section" id="tools">
+    <div class="container">
+      <h2>Five Tools. One Financial Picture.</h2>
+      <p class="subtitle">No account needed. Enter your numbers anonymously and get clear, visual insights in seconds.</p>
+
+      <div class="tools-grid">
+
+        <a href="net-worth.html" class="tool-card">
+          <div class="tool-icon tool-icon-teal">💰</div>
+          <h3>Net Worth Snapshot</h3>
+          <p>Add up everything you own and everything you owe. See your true financial starting point with a clear assets vs. liabilities breakdown.</p>
+          <span class="tool-card-link">Open tool →</span>
+        </a>
+
+        <a href="budget.html" class="tool-card">
+          <div class="tool-icon tool-icon-amber">📊</div>
+          <h3>Monthly Budget Breakdown</h3>
+          <p>Enter your income and monthly expenses. See exactly where your money goes, what you have left, and which categories are eating your budget.</p>
+          <span class="tool-card-link">Open tool →</span>
+        </a>
+
+        <a href="debt-payoff.html" class="tool-card">
+          <div class="tool-icon tool-icon-green">📉</div>
+          <h3>Debt Payoff Visualizer</h3>
+          <p>Enter your debts and compare the Avalanche vs. Snowball methods side by side. See exactly when you'll be debt-free and how much interest you'll save.</p>
+          <span class="tool-card-link">Open tool →</span>
+        </a>
+
+        <a href="spending-simulator.html" class="tool-card">
+          <div class="tool-icon tool-icon-navy">🚀</div>
+          <h3>Spending Simulator</h3>
+          <p>What if you cut one spending habit? See how small, consistent behavioral changes can compound into serious savings over 1, 5, 10, and 20 years.</p>
+          <span class="tool-card-link">Open tool →</span>
+        </a>
+
+        <a href="credit-card.html" class="tool-card">
+          <div class="tool-icon tool-icon-green">💳</div>
+          <h3>Credit Card Payoff</h3>
+          <p>Enter your income, expenses, and card balance. See exactly how fast you can pay it off and how much interest you save by putting your surplus toward the card.</p>
+          <span class="tool-card-link">Open tool →</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How It Works ── -->
+  <section class="how-section">
+    <div class="container">
+      <h2>Simple. Private. Powerful.</h2>
+      <p class="subtitle">No spreadsheets, no spreadsheet skills required. Just your numbers and a few seconds.</p>
+      <div class="steps-grid">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Pick a Tool</h3>
+          <p>Choose what you want to understand — your net worth, budget, debt, or the impact of a spending change.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Enter Your Numbers</h3>
+          <p>Fill in your real numbers. Everything stays in your browser — nothing is saved, tracked, or stored.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>See Your Picture</h3>
+          <p>Charts and insights update in real time. Take a screenshot, share it, or simply use what you learn.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Email Capture ── -->
+  <section class="email-section section" id="get-access">
+    <div class="container">
+      <div class="email-box">
+        <h2>Stay in the Loop</h2>
+        <p>Get notified when new tools drop, plus practical personal finance tips delivered straight to your inbox. No fluff. No spam.</p>
+        <form class="email-form" onsubmit="handleEmailSubmit(event)">
+          <input type="email" id="emailInput" placeholder="Enter your email address" required />
+          <button type="submit" class="btn btn-primary">Get Access</button>
+        </form>
+        <p class="email-disclaimer">No spam, ever. Unsubscribe any time.</p>
+        <p id="emailSuccess" class="hidden" style="color: var(--teal); font-weight: 600; margin-top: 1rem; position: relative;">
+          ✓ You're on the list! Check your inbox.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">TechSavy<span>Money</span></div>
+        <div class="footer-links">
+          <a href="net-worth.html">Net Worth</a>
+          <a href="budget.html">Budget</a>
+          <a href="debt-payoff.html">Debt Payoff</a>
+          <a href="credit-card.html">CC Payoff</a>
+          <a href="spending-simulator.html">Simulator</a>
+        </div>
+        <p class="footer-copy">For educational purposes only. Not financial advice.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Netlify Forms registration — required for feedback widget to submit correctly -->
+  <form name="feedback" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input name="bot-field" />
+    <input name="type" />
+    <input name="message" />
+    <input name="email" />
+    <input name="page" />
+  </form>
+
+  <script src="js/feedback.js"></script>
+  <script>
+    function toggleNav() {
+      document.getElementById('mobileNav').classList.toggle('open');
+    }
+    function handleEmailSubmit(e) {
+      e.preventDefault();
+      // TODO: Connect to your email provider (Mailchimp, ConvertKit, etc.)
+      document.querySelector('.email-form').classList.add('hidden');
+      document.getElementById('emailSuccess').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
