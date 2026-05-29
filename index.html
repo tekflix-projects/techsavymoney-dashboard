@@ -162,7 +162,7 @@
   </footer>
 
   <!-- Netlify Forms registration — required for feedback widget to submit correctly -->
-  <form name="feedback" data-netlify="true" netlify-honeypot="bot-field" style="display:none">
+  <form name="feedback" method="POST" data-netlify="true" netlify-honeypot="bot-field" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
     <input name="bot-field" />
     <input name="type" />
     <input name="message" />
