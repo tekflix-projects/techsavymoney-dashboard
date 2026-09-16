@@ -1365,3 +1365,182 @@ input.tsm-prefilled {
   .navbar .container { gap: 0.75rem; }
   .theme-toggle { margin-left: auto; }
 }
+
+/* ═══ Feedback widget ═════════════════════════════════════════════
+   Injected by js/feedback.js on every page. Its markup is fixed, so
+   these selectors match what that file emits.
+   ═══════════════════════════════════════════════════════════════════ */
+
+textarea {
+  width: 100%;
+  padding: 0.6875rem 0.875rem;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--ink);
+  resize: vertical;
+  min-height: 5.5rem;
+  transition: border-color 0.16s var(--ease), box-shadow 0.16s var(--ease);
+}
+textarea::placeholder { color: color-mix(in srgb, var(--muted) 72%, transparent); }
+textarea:hover { border-color: var(--muted); }
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3.5px var(--accent-glow);
+}
+textarea.error {
+  border-color: var(--neg);
+  box-shadow: 0 0 0 3.5px color-mix(in srgb, var(--neg) 16%, transparent);
+}
+
+.btn-block { display: flex; width: 100%; }
+
+/* ── Launcher ──────────────────────────────────────────────────── */
+.feedback-btn {
+  position: fixed;
+  right: 1.125rem;
+  bottom: 1.125rem;
+  z-index: 200;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  padding: 0.5625rem 1rem;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease),
+              border-color 0.18s var(--ease);
+}
+.feedback-btn:hover {
+  transform: translateY(-1.5px);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md);
+}
+.feedback-btn svg { color: var(--accent); flex-shrink: 0; }
+
+/* ── Overlay + modal ───────────────────────────────────────────── */
+.feedback-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: color-mix(in srgb, var(--shell) 62%, transparent);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  animation: feedback-fade 0.2s var(--ease);
+}
+@keyframes feedback-fade { from { opacity: 0; } to { opacity: 1; } }
+
+.feedback-modal {
+  width: min(29rem, 100%);
+  max-height: calc(100vh - 2.5rem);
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  animation: feedback-rise 0.24s var(--ease);
+}
+@keyframes feedback-rise {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+
+.feedback-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.875rem;
+  padding: 1.125rem 1.5rem;
+  border-bottom: 1px solid var(--line);
+}
+.feedback-modal-header h3 { font-size: 1.125rem; margin: 0; }
+
+.feedback-close-btn {
+  display: grid;
+  place-items: center;
+  width: 1.875rem;
+  height: 1.875rem;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.16s var(--ease), color 0.16s var(--ease);
+}
+.feedback-close-btn:hover { background: var(--surface-2); color: var(--ink); }
+
+.feedback-modal-body { padding: 1.5rem; }
+
+/* ── Type toggle ───────────────────────────────────────────────── */
+.feedback-type-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.375rem;
+  padding: 0.25rem;
+  margin-bottom: 1.25rem;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+.feedback-type-btn {
+  padding: 0.4375rem 0.625rem;
+  background: none;
+  border: none;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.16s var(--ease), color 0.16s var(--ease), box-shadow 0.16s var(--ease);
+}
+.feedback-type-btn:hover { color: var(--ink); }
+.feedback-type-btn.active {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-xs);
+}
+
+.feedback-privacy-note {
+  margin-top: 0.875rem;
+  font-size: 0.71875rem;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* ── Success ───────────────────────────────────────────────────── */
+.feedback-success { padding: 2.5rem 1.5rem; }
+.feedback-success-inner { text-align: center; }
+.feedback-success-emoji { font-size: 2.5rem; line-height: 1; margin-bottom: 0.875rem; }
+.feedback-success h3 { margin-bottom: 0.5rem; }
+.feedback-success p { font-size: 0.9375rem; line-height: 1.6; color: var(--muted); }
+
+/* ── Responsive ────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .feedback-btn { right: 0.875rem; bottom: 0.875rem; padding: 0.5rem 0.875rem; font-size: 0.75rem; }
+  .feedback-modal-header, .feedback-modal-body { padding: 1.125rem; }
+}
+/* Below this the launcher and the privacy pill would collide */
+@media (max-width: 420px) {
+  .feedback-btn span, .feedback-btn { font-size: 0; gap: 0; padding: 0.625rem; }
+  .feedback-btn svg { width: 18px; height: 18px; }
+}
+
+@media print { .feedback-btn, .feedback-overlay { display: none !important; } }
