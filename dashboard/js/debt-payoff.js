@@ -9,6 +9,15 @@ function fmt(n) {
   return '$' + Math.round(n).toLocaleString('en-US');
 }
 
+/* Debt names are user-typed and get interpolated into innerHTML below.
+   Escaping keeps a name like  <img onerror=...>  inert — which matters
+   now that state is shared and will eventually be shareable by link. */
+function esc(str) {
+  return String(str).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
 function addDebt(name = '', balance = '', rate = '', minPayment = '') {
   debtCount++;
   const id = debtCount;
@@ -29,7 +38,7 @@ function addDebt(name = '', balance = '', rate = '', minPayment = '') {
     <div class="debt-item-grid">
       <div class="form-group" style="grid-column: 1 / -1;">
         <label>Debt Name</label>
-        <input type="text" id="name-${id}" placeholder="e.g. Chase Credit Card" value="${name}" oninput="update()" />
+        <input type="text" id="name-${id}" placeholder="e.g. Chase Credit Card" value="${esc(name)}" oninput="update()" />
       </div>
       <div class="form-group">
         <label>Balance</label>
@@ -120,7 +129,11 @@ function simulatePayoff(debts, extraPayment, method) {
     });
   }
 
-  return { months: month, totalInterest, history };
+  // If minimums never cover the accruing interest the loop hits its
+  // 600-month guard with a balance still outstanding. Reporting that as
+  // "50 years" would be wrong — the debt does not pay off at all.
+  const stalled = sortedDebts.some(d => d.remaining > 0.01);
+  return { months: month, totalInterest, history, stalled };
 }
 
 function monthsToDate(months) {
@@ -158,6 +171,11 @@ function update() {
 
   if (!avalanche || !snowball) return;
 
+  const stalledWarning = document.getElementById('stalledWarning');
+  if (stalledWarning) {
+    stalledWarning.classList.toggle('hidden', !(avalanche.stalled && snowball.stalled));
+  }
+
   // ── Method Cards ──
   document.getElementById('avalancheMonths').textContent   = monthsToStr(avalanche.months);
   document.getElementById('avalancheInterest').textContent = fmt(avalanche.totalInterest);
@@ -190,6 +208,8 @@ function update() {
 
   // ── Debt Table ──
   renderDebtTable(debts);
+
+  syncDebtsToStore();
 }
 
 function renderChart(avalancheHistory, snowballHistory) {
@@ -288,7 +308,7 @@ function renderDebtTable(debts) {
     row.innerHTML = `
       <div class="category-dot" style="background:${d.color}"></div>
       <div class="category-name">
-        <div style="font-weight:600;">${d.name}</div>
+        <div style="font-weight:600;">${esc(d.name)}</div>
         <div style="font-size:0.75rem; color:var(--text-muted);">$${d.minPayment}/mo min · $${monthlyInterest}/mo interest</div>
       </div>
       <div style="text-align:right;">
@@ -300,6 +320,87 @@ function renderDebtTable(debts) {
   });
 }
 
-// Start with 2 sample debts pre-filled
-addDebt('Credit Card', '5000', '19.99', '100');
-addDebt('Car Loan', '12000', '6.5', '250');
+/* ─── Shared state (Layer 1) ──────────────────────────────────────
+ * Debts live in repeating rows rather than fixed inputs, so they are
+ * wired here by hand instead of through data-tsm attributes. */
+
+var seededFromStore = false;
+
+function seedDebts() {
+  if (!window.TSM) {
+    addDebt('Credit Card', '5000', '19.99', '100');
+    addDebt('Car Loan', '12000', '6.5', '250');
+    return;
+  }
+
+  var stored = window.TSM.get('debts');
+  if (Array.isArray(stored) && stored.length > 0) {
+    stored.forEach(function (d) {
+      addDebt(d.name || '', d.balance ?? '', d.rate ?? '', d.minPayment ?? '');
+    });
+    seededFromStore = true;
+    return;
+  }
+
+  // Nothing itemised yet — infer rows from the net-worth liabilities so
+  // the user does not retype debts they have already entered.
+  var inferred = window.TSM.debtsFromLiabilities();
+  if (inferred.length > 0) {
+    inferred.forEach(function (d) {
+      addDebt(d.name, d.balance, d.rate, d.minPayment);
+    });
+    seededFromStore = true;
+    noteInferredDebts(inferred.length);
+    return;
+  }
+
+  addDebt('Credit Card', '5000', '19.99', '100');
+  addDebt('Car Loan', '12000', '6.5', '250');
+}
+
+/* Balances come from the net-worth tool, but it never asked for interest
+   rates or minimums — those are typical-value estimates. Say so plainly
+   rather than letting a guessed APR read as the user's own number. */
+function noteInferredDebts(count) {
+  document.addEventListener('tsm:ready', function () {
+    var anchor = document.querySelector('.tool-header');
+    if (!anchor) return;
+    var note = document.createElement('div');
+    note.className = 'tsm-banner';
+    note.setAttribute('role', 'status');
+    note.innerHTML =
+      '<span class="tsm-banner-icon" aria-hidden="true">\u21A9</span>' +
+      '<span class="tsm-banner-text"><strong>' + count + ' debt' + (count === 1 ? '' : 's') +
+      '</strong> carried over from your net worth. The balances are yours \u2014 ' +
+      '<strong>the interest rates and minimums below are estimates</strong>, so replace ' +
+      'them with your real numbers for an accurate payoff date.</span>';
+    var close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'tsm-banner-close';
+    close.setAttribute('aria-label', 'Dismiss');
+    close.textContent = '\u00D7';
+    close.addEventListener('click', function () { note.remove(); });
+    note.appendChild(close);
+    anchor.after(note);
+  }, { once: true });
+}
+
+/* Push every edit back to the shared store. Guarded so the sample rows
+   are never mistaken for real figures the user entered. */
+function syncDebtsToStore() {
+  if (!window.TSM) return;
+  if (!seededFromStore && !userTouchedDebts) return;
+  window.TSM.setDebts(getDebts());
+}
+
+var userTouchedDebts = false;
+document.addEventListener('input', function (e) {
+  if (e.target instanceof HTMLElement && e.target.closest('.debt-item')) {
+    userTouchedDebts = true;
+  }
+}, true);
+
+document.addEventListener('tsm:beforehydrate', seedDebts, { once: true });
+
+// Fall back to seeding directly if the shared-state UI is unavailable.
+if (!window.TSM) seedDebts();

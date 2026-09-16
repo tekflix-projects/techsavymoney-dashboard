@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="css/styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
-<body>
+<body data-tool="credit-card">
 
   <nav class="navbar">
     <div class="container">
@@ -55,7 +55,7 @@
               <div class="form-group" style="margin-bottom:0;">
                 <label>Monthly Take-Home Pay</label>
                 <div class="input-prefix"><span>$</span>
-                  <input type="number" id="income" placeholder="0" min="0" oninput="update()" />
+                  <input type="number" id="income" data-tsm="income.primary" placeholder="0" min="0" oninput="update()" />
                 </div>
               </div>
             </div>
@@ -70,37 +70,37 @@
               <div class="form-group">
                 <label>Housing — Rent or Mortgage</label>
                 <div class="input-prefix"><span>$</span>
-                  <input type="number" id="exp-housing" placeholder="0" min="0" oninput="update()" />
+                  <input type="number" id="exp-housing" data-tsm-bucket="housing" placeholder="0" min="0" oninput="update()" />
                 </div>
               </div>
               <div class="form-group">
                 <label>Utilities</label>
                 <div class="input-prefix"><span>$</span>
-                  <input type="number" id="exp-utilities" placeholder="0" min="0" oninput="update()" />
+                  <input type="number" id="exp-utilities" data-tsm-bucket="utilities" placeholder="0" min="0" oninput="update()" />
                 </div>
               </div>
               <div class="form-group">
                 <label>Groceries &amp; Food</label>
                 <div class="input-prefix"><span>$</span>
-                  <input type="number" id="exp-food" placeholder="0" min="0" oninput="update()" />
+                  <input type="number" id="exp-food" data-tsm-bucket="food" placeholder="0" min="0" oninput="update()" />
                 </div>
               </div>
               <div class="form-group">
                 <label>Transportation</label>
                 <div class="input-prefix"><span>$</span>
-                  <input type="number" id="exp-transport" placeholder="0" min="0" oninput="update()" />
+                  <input type="number" id="exp-transport" data-tsm-bucket="transport" placeholder="0" min="0" oninput="update()" />
                 </div>
               </div>
               <div class="form-group">
                 <label>Subscriptions &amp; Bills</label>
                 <div class="input-prefix"><span>$</span>
-                  <input type="number" id="exp-subscriptions" placeholder="0" min="0" oninput="update()" />
+                  <input type="number" id="exp-subscriptions" data-tsm-bucket="subscriptions" placeholder="0" min="0" oninput="update()" />
                 </div>
               </div>
               <div class="form-group" style="margin-bottom:1.25rem;">
                 <label>Other</label>
                 <div class="input-prefix"><span>$</span>
-                  <input type="number" id="exp-other" placeholder="0" min="0" oninput="update()" />
+                  <input type="number" id="exp-other" data-tsm-bucket="other" placeholder="0" min="0" oninput="update()" />
                 </div>
               </div>
 
@@ -118,20 +118,20 @@
               <div class="form-group">
                 <label>Current Balance</label>
                 <div class="input-prefix"><span>$</span>
-                  <input type="number" id="cc-balance" placeholder="0" min="0" oninput="update()" />
+                  <input type="number" id="cc-balance" data-tsm="card.balance" placeholder="0" min="0" oninput="update()" />
                 </div>
               </div>
               <div class="form-group">
                 <label>Annual Interest Rate (APR)</label>
                 <div class="input-suffix">
-                  <input type="number" id="cc-apr" placeholder="20" min="0" max="100" step="0.1" value="20" oninput="update()" />
+                  <input type="number" id="cc-apr" data-tsm-default="20" data-tsm="card.apr" placeholder="20" min="0" max="100" step="0.1" value="20" oninput="update()" />
                   <span>%</span>
                 </div>
               </div>
               <div class="form-group" style="margin-bottom:0;">
                 <label>Current Minimum Payment</label>
                 <div class="input-prefix"><span>$</span>
-                  <input type="number" id="cc-min" placeholder="25" min="1" value="25" oninput="update()" />
+                  <input type="number" id="cc-min" data-tsm-default="25" data-tsm="card.minPayment" placeholder="25" min="1" value="25" oninput="update()" />
                 </div>
               </div>
             </div>
@@ -273,8 +273,11 @@
     </div>
   </footer>
 
+  <script src="js/store.js"></script>
+
   <script src="js/credit-card.js"></script>
   <script src="js/feedback.js"></script>
+  <script src="js/tsm-ui.js"></script>
   <script>function toggleNav() { document.getElementById('mobileNav').classList.toggle('open'); }</script>
 </body>
 </html>

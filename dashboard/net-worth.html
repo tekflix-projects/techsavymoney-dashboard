@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="css/styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
-<body>
+<body data-tool="net-worth">
 
   <nav class="navbar">
     <div class="container">
@@ -58,47 +58,47 @@
               <p class="section-label">Cash & Savings</p>
               <div class="form-group">
                 <label>Checking Account(s)</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="checking" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="checking" data-tsm="assets.checking" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Savings Account(s)</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="savings" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="savings" data-tsm="assets.savings" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Emergency Fund</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="emergency" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="emergency" data-tsm="assets.emergency" placeholder="0" min="0" oninput="update()" /></div>
               </div>
 
               <p class="section-label mt-2">Investments</p>
               <div class="form-group">
                 <label>401(k) / 403(b) / TSP</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="retirement" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="retirement" data-tsm="assets.retirement" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>IRA / Roth IRA</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="ira" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="ira" data-tsm="assets.ira" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Brokerage / Stocks</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="brokerage" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="brokerage" data-tsm="assets.brokerage" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Crypto</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="crypto" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="crypto" data-tsm="assets.crypto" placeholder="0" min="0" oninput="update()" /></div>
               </div>
 
               <p class="section-label mt-2">Property & Other</p>
               <div class="form-group">
                 <label>Home / Real Estate (current value)</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="realestate" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="realestate" data-tsm="assets.realestate" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Vehicles (current market value)</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="vehicles" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="vehicles" data-tsm="assets.vehicles" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Other Assets</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="otherAssets" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="otherAssets" data-tsm="assets.otherAssets" placeholder="0" min="0" oninput="update()" /></div>
               </div>
             </div>
           </div>
@@ -112,27 +112,27 @@
             <div class="card-body">
               <div class="form-group">
                 <label>Mortgage Balance</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="mortgage" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="mortgage" data-tsm="liabilities.mortgage" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Car Loan(s)</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="carLoan" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="carLoan" data-tsm="liabilities.carLoan" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Student Loans</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="studentLoan" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="studentLoan" data-tsm="liabilities.studentLoan" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Credit Card Balances</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="creditCards" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="creditCards" data-tsm="liabilities.creditCards" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Medical / Personal Loans</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="personalLoans" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="personalLoans" data-tsm="liabilities.personalLoans" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Other Debt</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="otherLiabilities" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="otherLiabilities" data-tsm="liabilities.otherLiabilities" placeholder="0" min="0" oninput="update()" /></div>
               </div>
             </div>
           </div>
@@ -229,8 +229,11 @@
     </div>
   </footer>
 
+  <script src="js/store.js"></script>
+
   <script src="js/net-worth.js"></script>
   <script src="js/feedback.js"></script>
+  <script src="js/tsm-ui.js"></script>
   <script>function toggleNav() { document.getElementById('mobileNav').classList.toggle('open'); }</script>
 </body>
 </html>

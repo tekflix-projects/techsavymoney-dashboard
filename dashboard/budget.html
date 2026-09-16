@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="css/styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
-<body>
+<body data-tool="budget">
 
   <nav class="navbar">
     <div class="container">
@@ -57,15 +57,15 @@
             <div class="card-body">
               <div class="form-group">
                 <label>Take-Home Pay (after taxes)</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="income" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="income" data-tsm="income.primary" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Side Income / Freelance</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="sideIncome" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="sideIncome" data-tsm="income.side" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Other Income</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="otherIncome" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="otherIncome" data-tsm="income.other" placeholder="0" min="0" oninput="update()" /></div>
               </div>
             </div>
           </div>
@@ -80,85 +80,85 @@
               <p class="section-label">Housing</p>
               <div class="form-group">
                 <label>Rent or Mortgage Payment</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="housing" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="housing" data-tsm="expenses.housing" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Utilities (electric, gas, water)</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="utilities" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="utilities" data-tsm="expenses.utilities" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Internet &amp; Phone</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="internet" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="internet" data-tsm="expenses.internet" placeholder="0" min="0" oninput="update()" /></div>
               </div>
 
               <p class="section-label mt-2">Food</p>
               <div class="form-group">
                 <label>Groceries</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="groceries" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="groceries" data-tsm="expenses.groceries" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Dining Out &amp; Takeout</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="dining" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="dining" data-tsm="expenses.dining" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Coffee &amp; Drinks</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="coffee" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="coffee" data-tsm="expenses.coffee" placeholder="0" min="0" oninput="update()" /></div>
               </div>
 
               <p class="section-label mt-2">Transportation</p>
               <div class="form-group">
                 <label>Car Payment</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="carPayment" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="carPayment" data-tsm="expenses.carPayment" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Gas &amp; Parking</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="gas" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="gas" data-tsm="expenses.gas" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Public Transit / Rideshare</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="transit" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="transit" data-tsm="expenses.transit" placeholder="0" min="0" oninput="update()" /></div>
               </div>
 
               <p class="section-label mt-2">Health &amp; Personal</p>
               <div class="form-group">
                 <label>Health Insurance / Medical</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="health" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="health" data-tsm="expenses.health" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Gym &amp; Fitness</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="gym" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="gym" data-tsm="expenses.gym" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Personal Care (haircuts, toiletries)</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="personal" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="personal" data-tsm="expenses.personal" placeholder="0" min="0" oninput="update()" /></div>
               </div>
 
               <p class="section-label mt-2">Lifestyle</p>
               <div class="form-group">
                 <label>Subscriptions (streaming, apps)</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="subscriptions" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="subscriptions" data-tsm="expenses.subscriptions" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Entertainment &amp; Hobbies</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="entertainment" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="entertainment" data-tsm="expenses.entertainment" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Shopping &amp; Clothing</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="shopping" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="shopping" data-tsm="expenses.shopping" placeholder="0" min="0" oninput="update()" /></div>
               </div>
 
               <p class="section-label mt-2">Financial</p>
               <div class="form-group">
                 <label>Savings / Investments (monthly)</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="savingsContrib" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="savingsContrib" data-tsm="expenses.savingsContrib" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Debt Payments (minimum totals)</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="debtPayments" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="debtPayments" data-tsm="expenses.debtPayments" placeholder="0" min="0" oninput="update()" /></div>
               </div>
               <div class="form-group">
                 <label>Other Expenses</label>
-                <div class="input-prefix"><span>$</span><input type="number" id="otherExpenses" placeholder="0" min="0" oninput="update()" /></div>
+                <div class="input-prefix"><span>$</span><input type="number" id="otherExpenses" data-tsm="expenses.otherExpenses" placeholder="0" min="0" oninput="update()" /></div>
               </div>
             </div>
           </div>
@@ -262,8 +262,11 @@
     </div>
   </footer>
 
+  <script src="js/store.js"></script>
+
   <script src="js/budget.js"></script>
   <script src="js/feedback.js"></script>
+  <script src="js/tsm-ui.js"></script>
   <script>function toggleNav() { document.getElementById('mobileNav').classList.toggle('open'); }</script>
 </body>
 </html>

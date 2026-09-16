@@ -10,7 +10,8 @@ function fmt(n) {
 
 function val(id, fallback) {
   fallback = fallback === undefined ? 0 : fallback;
-  return parseFloat(document.getElementById(id).value) || fallback;
+  var el = document.getElementById(id);
+  return el ? (parseFloat(el.value) || fallback) : fallback;
 }
 
 function totalExpenses() {

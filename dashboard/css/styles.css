@@ -907,3 +907,220 @@ p  { color: var(--text-muted); line-height: 1.7; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 100px; }
 ::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
+
+/* ═══ TSM Shared State (Layer 1) ══════════════════════════════════ */
+
+/* ── Prefilled field ───────────────────────────────────────────── */
+input.tsm-prefilled {
+  background: var(--teal-light);
+  border-color: var(--teal);
+}
+
+/* ── Prefill banner ────────────────────────────────────────────── */
+.tsm-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  background: var(--teal-light);
+  border: 1px solid rgba(0, 180, 162, 0.3);
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  color: var(--navy);
+  animation: tsm-slide-in 0.3s ease;
+}
+.tsm-banner-icon { color: var(--teal-dark); font-weight: 700; flex-shrink: 0; }
+.tsm-banner-text { flex: 1; min-width: 0; }
+.tsm-banner-undo {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--teal-dark);
+  text-decoration: underline;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+.tsm-banner-undo:hover { background: rgba(0, 180, 162, 0.12); }
+.tsm-banner-close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  padding: 0 0.25rem;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.tsm-banner-close:hover { color: var(--text); }
+
+@keyframes tsm-slide-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Privacy control ───────────────────────────────────────────── */
+.tsm-privacy {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  max-width: calc(100vw - 2rem);
+}
+
+.tsm-privacy-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, box-shadow 0.15s;
+}
+.tsm-privacy-pill:hover { border-color: var(--teal); color: var(--text); box-shadow: var(--shadow-md); }
+.tsm-privacy-pill:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+.tsm-privacy-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+}
+.tsm-privacy.has-data .tsm-privacy-dot { background: var(--green); }
+.tsm-privacy.has-data .tsm-privacy-pill { color: var(--text); }
+
+.tsm-privacy-panel {
+  width: min(22rem, calc(100vw - 2rem));
+  padding: 1.125rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  animation: tsm-slide-up 0.18s ease;
+}
+.tsm-privacy-panel[hidden] { display: none; }
+
+@keyframes tsm-slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.tsm-privacy-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.tsm-privacy-head strong { font-size: 0.875rem; color: var(--navy); line-height: 1.35; }
+.tsm-privacy-bytes {
+  flex-shrink: 0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--green);
+  background: var(--green-light);
+  padding: 0.125rem 0.4375rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.tsm-privacy-copy {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  margin-bottom: 0.875rem;
+}
+
+.tsm-privacy-modes { display: flex; flex-direction: column; gap: 0.375rem; margin-bottom: 0.75rem; }
+.tsm-privacy-mode {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.tsm-privacy-mode:hover { border-color: var(--teal); }
+.tsm-privacy-mode.active { border-color: var(--teal); background: var(--teal-light); }
+.tsm-privacy-mode input { margin-top: 0.1875rem; accent-color: var(--teal-dark); }
+.tsm-privacy-mode-label { display: block; font-size: 0.8125rem; font-weight: 600; color: var(--text); }
+.tsm-privacy-mode-hint { display: block; font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
+
+.tsm-privacy-expiry {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.tsm-privacy-clear {
+  width: 100%;
+  padding: 0.5rem;
+  background: var(--red-light);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--red);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.tsm-privacy-clear:hover:not(:disabled) { background: #FDE2E2; }
+.tsm-privacy-clear:disabled { opacity: 0.45; cursor: default; }
+
+.tsm-privacy-proof {
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Cross-tool summary strip ──────────────────────────────────── */
+.tsm-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+.tsm-summary[hidden] { display: none; }
+.tsm-summary-item { display: flex; align-items: baseline; gap: 0.375rem; font-size: 0.8125rem; }
+.tsm-summary-label { color: var(--text-muted); }
+.tsm-summary-value { font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
+.tsm-summary-value.positive { color: var(--green); }
+.tsm-summary-value.negative { color: var(--red); }
+
+@media (max-width: 640px) {
+  .tsm-privacy { bottom: 0.75rem; left: 0.75rem; }
+  .tsm-privacy-pill { font-size: 0.75rem; padding: 0.4375rem 0.75rem; }
+}
+
+@media print {
+  .tsm-privacy, .tsm-banner { display: none !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tsm-banner, .tsm-privacy-panel { animation: none; }
+}

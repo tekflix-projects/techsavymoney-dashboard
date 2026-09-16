@@ -7,7 +7,7 @@
   <meta name="description" content="Free personal finance tools to visualize your net worth, budget, debt payoff plan, and the impact of small spending changes." />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
+<body data-tool="home">
 
   <!-- ── Navbar ── -->
   <nav class="navbar">
@@ -170,7 +170,11 @@
     <input name="page" />
   </form>
 
+  <script src="js/store.js"></script>
+
   <script src="js/feedback.js"></script>
+
+  <script src="js/tsm-ui.js"></script>
   <script>
     function toggleNav() {
       document.getElementById('mobileNav').classList.toggle('open');
