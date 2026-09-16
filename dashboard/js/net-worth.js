@@ -1,16 +1,16 @@
 /* ─── Net Worth Calculator ─────────────────────────────────────── */
 
 const ASSET_FIELDS = [
-  { id: 'checking',    label: 'Checking',      group: 'Cash & Savings',  color: '#00B4A2' },
-  { id: 'savings',     label: 'Savings',        group: 'Cash & Savings',  color: '#00CDB8' },
-  { id: 'emergency',   label: 'Emergency Fund', group: 'Cash & Savings',  color: '#33C9B8' },
-  { id: 'retirement',  label: '401k / 403b',    group: 'Investments',     color: '#0F1F3D' },
-  { id: 'ira',         label: 'IRA / Roth',     group: 'Investments',     color: '#1A3460' },
-  { id: 'brokerage',   label: 'Brokerage',      group: 'Investments',     color: '#2A4A80' },
-  { id: 'crypto',      label: 'Crypto',         group: 'Investments',     color: '#3A5A9A' },
-  { id: 'realestate',  label: 'Real Estate',    group: 'Property',        color: '#10B981' },
-  { id: 'vehicles',    label: 'Vehicles',       group: 'Property',        color: '#34D399' },
-  { id: 'otherAssets', label: 'Other Assets',   group: 'Other',           color: '#6EE7B7' },
+  { id: 'checking',    label: 'Checking',      group: 'Cash & Savings',  color: '#0E9C84' },
+  { id: 'savings',     label: 'Savings',        group: 'Cash & Savings',  color: '#3FB89E' },
+  { id: 'emergency',   label: 'Emergency Fund', group: 'Cash & Savings',  color: '#6ECFB6' },
+  { id: 'retirement',  label: '401k / 403b',    group: 'Investments',     color: '#2F6F8F' },
+  { id: 'ira',         label: 'IRA / Roth',     group: 'Investments',     color: '#4C89A6' },
+  { id: 'brokerage',   label: 'Brokerage',      group: 'Investments',     color: '#6BA2BB' },
+  { id: 'crypto',      label: 'Crypto',         group: 'Investments',     color: '#8FBACE' },
+  { id: 'realestate',  label: 'Real Estate',    group: 'Property',        color: '#7C9A5E' },
+  { id: 'vehicles',    label: 'Vehicles',       group: 'Property',        color: '#9DB77E' },
+  { id: 'otherAssets', label: 'Other Assets',   group: 'Other',           color: '#BEA97C' },
 ];
 
 const LIABILITY_FIELDS = [
@@ -92,7 +92,7 @@ function renderChart(assets, totalAssets, totalLiabilities) {
 
   const labels  = [...assets.map(a => a.label), 'Total Debt'];
   const data    = [...assets.map(a => a.amount), totalLiabilities];
-  const colors  = [...assets.map(a => a.color), '#EF4444'];
+  const colors  = [...assets.map(a => a.color), '#D14436'];
 
   if (chart) chart.destroy();
 
@@ -104,7 +104,6 @@ function renderChart(assets, totalAssets, totalLiabilities) {
         data,
         backgroundColor: colors,
         borderWidth: 2,
-        borderColor: '#fff',
         hoverOffset: 6,
       }]
     },
@@ -126,7 +125,7 @@ function renderChart(assets, totalAssets, totalLiabilities) {
   const breakdown = document.getElementById('chartBreakdown');
   breakdown.innerHTML = '';
   const allItems = [...assets.map(a => ({ label: a.label, amount: a.amount, color: a.color })),
-                    ...(totalLiabilities > 0 ? [{ label: 'Total Debt', amount: totalLiabilities, color: '#EF4444' }] : [])];
+                    ...(totalLiabilities > 0 ? [{ label: 'Total Debt', amount: totalLiabilities, color: '#D14436' }] : [])];
   const total = totalAssets + totalLiabilities;
 
   allItems.forEach(item => {

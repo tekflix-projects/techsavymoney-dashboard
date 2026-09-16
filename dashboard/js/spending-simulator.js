@@ -117,7 +117,7 @@ function renderChart(monthlySaved, annualReturn, contribs) {
         {
           label: 'Your Contributions',
           data: contributionData,
-          backgroundColor: 'rgba(0,180,162,0.5)',
+          backgroundColor: 'rgba(14,156,132,0.5)',
           borderColor: 'var(--teal)',
           borderWidth: 1,
           stack: 'stack',
@@ -143,7 +143,6 @@ function renderChart(monthlySaved, annualReturn, contribs) {
         y: {
           stacked: true,
           beginAtZero: true,
-          grid: { color: 'rgba(0,0,0,0.04)' },
           ticks: {
             font: { size: 11 },
             callback: v => v >= 1000 ? '$' + (v/1000).toFixed(0) + 'k' : '$' + v

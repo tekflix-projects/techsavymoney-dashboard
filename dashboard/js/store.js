@@ -182,6 +182,119 @@
     memoryStore.delete(key);
   };
 
+  /* ── Shareable scenarios (Layer 3) ─────────────────────────────
+   * The whole picture is encoded into the URL *fragment*. Fragments are
+   * never transmitted to a server — not in the request line, not in a
+   * Referer header — so a scenario can be handed to a spouse or an
+   * advisor with nothing stored anywhere. The no-database constraint is
+   * what makes this possible; the link IS the data.
+   *
+   * Fixed field order, so a link made today still decodes after the
+   * schema gains fields. Append only — never reorder or remove. */
+  const SHARE_FIELDS = Object.freeze([
+    'income.primary', 'income.side', 'income.other',
+    'expenses.housing', 'expenses.utilities', 'expenses.internet', 'expenses.groceries',
+    'expenses.health', 'expenses.carPayment', 'expenses.gas', 'expenses.debtPayments',
+    'expenses.dining', 'expenses.coffee', 'expenses.transit', 'expenses.subscriptions',
+    'expenses.entertainment', 'expenses.shopping', 'expenses.gym', 'expenses.personal',
+    'expenses.savingsContrib', 'expenses.otherExpenses',
+    'assets.checking', 'assets.savings', 'assets.emergency', 'assets.retirement',
+    'assets.ira', 'assets.brokerage', 'assets.crypto', 'assets.realestate',
+    'assets.vehicles', 'assets.otherAssets',
+    'liabilities.mortgage', 'liabilities.carLoan', 'liabilities.studentLoan',
+    'liabilities.creditCards', 'liabilities.personalLoans', 'liabilities.otherLiabilities',
+    'card.balance', 'card.apr', 'card.minPayment', 'card.limit',
+    'assumptions.returnRate', 'assumptions.debtRate',
+    'shock.continuingIncome', 'shock.continuingMonths',
+  ]);
+
+  const SHARE_VERSION = 1;
+
+  const bytesToBase64Url = (bytes) => {
+    let binary = '';
+    // Chunked: a spread over a large array blows the call stack.
+    for (let i = 0; i < bytes.length; i += 0x8000) {
+      binary += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    }
+    return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  };
+
+  const base64UrlToBytes = (str) => {
+    const b64 = str.replace(/-/g, '+').replace(/_/g, '/')
+      .padEnd(Math.ceil(str.length / 4) * 4, '=');
+    const binary = atob(b64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+    return bytes;
+  };
+
+  const streamThrough = async (bytes, transform) => {
+    const stream = new Blob([bytes]).stream().pipeThrough(transform);
+    return new Uint8Array(await new Response(stream).arrayBuffer());
+  };
+
+  /** Round-trip safe, and small: a full picture fits in a normal URL. */
+  const packState = (state) => {
+    const values = SHARE_FIELDS.map((path) => {
+      const v = deepGet(state, path);
+      return typeof v === 'number' && Number.isFinite(v) ? Math.round(v * 100) / 100 : null;
+    });
+    const debts = (state.debts ?? []).map((d) => [d.name ?? '', d.balance, d.rate, d.minPayment]);
+    return [SHARE_VERSION, values, debts];
+  };
+
+  const unpackState = (packed) => {
+    if (!Array.isArray(packed) || packed[0] !== SHARE_VERSION) return null;
+    const [, values, debts] = packed;
+    if (!Array.isArray(values)) return null;
+
+    const next = createState();
+    values.forEach((v, i) => {
+      if (i >= SHARE_FIELDS.length) return;       // link from a newer schema
+      if (typeof v !== 'number' || !Number.isFinite(v)) return;
+      deepSet(next, SHARE_FIELDS[i], v);
+    });
+    next.debts = (Array.isArray(debts) ? debts : [])
+      .map(([name, balance, rate, minPayment]) => ({
+        name: String(name ?? '').slice(0, 60),
+        balance: toNumber(balance), rate: toNumber(rate), minPayment: toNumber(minPayment),
+      }))
+      .filter((d) => d.balance != null && d.balance > 0);
+    return next;
+  };
+
+  async function encodeScenario(state) {
+    const json = JSON.stringify(packState(state));
+    const raw = new TextEncoder().encode(json);
+    if (typeof CompressionStream === 'function') {
+      try {
+        return 'z' + bytesToBase64Url(await streamThrough(raw, new CompressionStream('deflate-raw')));
+      } catch { /* fall through to uncompressed */ }
+    }
+    return 'j' + bytesToBase64Url(raw);
+  }
+
+  async function decodeScenario(token) {
+    if (typeof token !== 'string' || token.length < 2) return null;
+    const kind = token[0];
+    let bytes;
+    try {
+      bytes = base64UrlToBytes(token.slice(1));
+    } catch { return null; }
+
+    try {
+      if (kind === 'z') {
+        if (typeof DecompressionStream !== 'function') return null;
+        bytes = await streamThrough(bytes, new DecompressionStream('deflate-raw'));
+      } else if (kind !== 'j') {
+        return null;
+      }
+      return unpackState(JSON.parse(new TextDecoder().decode(bytes)));
+    } catch {
+      return null;   // truncated or tampered link — never throw at the user
+    }
+  }
+
   /* ── Store ─────────────────────────────────────────────────────── */
 
   class Store {
@@ -284,6 +397,13 @@
 
     patch(partial) {
       mergeIntoSchema(this.#state, partial);
+      this.#commit();
+    }
+
+    /** Adopt a decoded scenario wholesale, discarding what was there. */
+    replace(next) {
+      this.#state = mergeIntoSchema(createState(), next);
+      this.#state.version = SCHEMA_VERSION;
       this.#commit();
     }
 
@@ -514,6 +634,9 @@
     get: (path) => store.get(path),
     set: (path, value) => store.set(path, value),
     patch: (partial) => store.patch(partial),
+    replace: (next) => store.replace(next),
+    encodeScenario: () => encodeScenario(store.get()),
+    decodeScenario,
     transact: (fn) => store.transact(fn),
     subscribe: (fn) => store.subscribe(fn),
     snapshot: () => store.snapshot(),

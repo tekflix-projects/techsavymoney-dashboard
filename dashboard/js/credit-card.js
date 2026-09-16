@@ -183,8 +183,8 @@ function renderChart(minHistory, recHistory) {
         {
           label: 'Minimum Payment',
           data: minData,
-          borderColor: '#EF4444',
-          backgroundColor: 'rgba(239,68,68,0.06)',
+          borderColor: '#D14436',
+          backgroundColor: 'rgba(209,68,54,0.06)',
           borderWidth: 2.5,
           tension: 0.3,
           fill: true,
@@ -194,8 +194,8 @@ function renderChart(minHistory, recHistory) {
         {
           label: 'Max Payoff',
           data: recData,
-          borderColor: '#00B4A2',
-          backgroundColor: 'rgba(0,180,162,0.08)',
+          borderColor: '#0E9C84',
+          backgroundColor: 'rgba(14,156,132,0.08)',
           borderWidth: 2.5,
           tension: 0.3,
           fill: true,
@@ -209,12 +209,10 @@ function renderChart(minHistory, recHistory) {
       interaction: { mode: 'index', intersect: false },
       scales: {
         x: {
-          grid: { color: 'rgba(0,0,0,0.04)' },
           ticks: { maxTicksLimit: 10, font: { size: 11 } }
         },
         y: {
           beginAtZero: true,
-          grid: { color: 'rgba(0,0,0,0.04)' },
           ticks: {
             font: { size: 11 },
             callback: function (v) {

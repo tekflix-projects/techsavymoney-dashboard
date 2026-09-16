@@ -1,6 +1,6 @@
 # Workflow — The Resilience Engine
 
-**Status:** Layers 1 and 2 shipped · Layer 3 specified, not built
+**Status:** All three layers shipped · site redesigned 2026-09-16
 **Owner:** Mike
 **Last updated:** 2026-09-16
 
@@ -100,7 +100,7 @@ understands: time, not dollars.
 - Nobody owns the term. "Emergency fund calculator" is a red ocean.
   "What breaks first" is empty water.
 
-### Layer 3 — Make privacy provable, and turn it into distribution ⬜ NOT BUILT
+### Layer 3 — Make privacy provable, and turn it into distribution ✅ SHIPPED
 
 The no-database constraint is the moat, but only if it is **visible**:
 
@@ -314,17 +314,97 @@ with credit headroom removed. Empty, partial, zero-cushion, and wealthy
 
 ---
 
+## 4c. Layer 3 — what was actually built
+
+### Scenario links
+
+`encodeScenario()` / `decodeScenario()` in `store.js`. The whole picture is
+packed into a fixed-order array (so a link made today still decodes after the
+schema gains fields — **append only, never reorder**), JSON-encoded, deflated
+via `CompressionStream`, and base64url'd into the URL **fragment**.
+
+Measured: 29 figures plus 3 debts → a 203-character token, 243-character URL.
+Comfortably inside any URL limit. Round-trip is lossless. `meta.tools` is
+deliberately excluded — it is local usage data, not financial.
+
+**Why the fragment specifically.** Fragments are never transmitted: not in the
+request line, not in a `Referer` header. So a scenario can be handed to a spouse
+or an advisor with nothing stored anywhere. The no-database constraint is what
+makes this possible, and the link *is* the data — which the UI says out loud
+rather than burying.
+
+### Receiving a link
+
+- Empty browser → adopted outright, with a banner saying where the figures came
+  from.
+- Browser with existing figures → **never overwritten**. A banner offers to load
+  it instead. Verified: the recipient's own numbers survive intact.
+- The fragment is stripped from the address bar either way, so a reload does not
+  re-apply it and it does not shoulder-surf.
+- Malformed or truncated tokens decode to `null` rather than throwing.
+
+---
+
+## 4d. The 2026-09-16 redesign
+
+The tools were sound but looked like every other calculator farm. The brief was
+"suave, modern, not basic" — and competing with NerdWallet on their own visual
+terms was never going to work.
+
+**Typography does the heavy lifting.** Fraunces (a variable serif, `WONK 0`
+`SOFT 0` so it reads considered rather than quirky) for display and figures;
+Inter for everything functional. The serif/sans contrast instantly reads
+editorial rather than template — no calculator farm uses it. Figures are set in
+tabular numerals throughout so columns line up.
+
+**Warm neutrals, not cold blue-grey.** `#FBFAF7` paper instead of `#F7F8FC`.
+This one change does more than anything else to stop it reading as Bootstrap.
+
+**One accent, used sparingly.** A refined teal; the featured tool card is the
+only element carrying an accent rule.
+
+**Full dark theme** with a three-state toggle (system / light / dark) applied
+before first paint by an inline `<head>` script, so there is no flash. The
+choice is a display preference and is kept apart from the financial state — it
+survives "erase everything".
+
+**Charts are theme-aware** (`js/chart-theme.js`). Chart.js draws grid lines,
+ticks and doughnut separators with fixed colours that assume a white page; those
+are now pulled from the same CSS custom properties as the rest of the site and
+refreshed when the theme flips. Data colours stay fixed — they identify a
+category, so they should not move when the theme does — but the whole
+categorical ramp was re-cut to sit with the new palette.
+
+**Legacy CSS variable names were kept as aliases.** Sixteen of them are
+referenced from inline styles across the HTML and from chart code; renaming them
+would have meant touching every file for no benefit.
+
+### Bugs found and fixed during this work
+
+10. **Fragment-only navigation does not reload the page** — so a share link
+    pasted while already on the site never reached the load-time handler and
+    silently did nothing. Now also handled on `hashchange`. Found because a test
+    appeared to pass while the store stayed empty.
+11. **Hydration ignored page defaults** (re-found in the redesign context):
+    `data-tsm-default` marks an input whose shipped value may be replaced.
+
+---
+
 ## 5. Build sequence from here
 
 1. ~~**Layer 2 — resilience engine.**~~ ✅ Shipped.
-2. **Layer 3 — URL-fragment sharing.** Roughly 50 lines of compress+encode, and
-   it is the growth loop.
+2. ~~**Layer 3 — URL-fragment sharing.**~~ ✅ Shipped.
 3. **Landing page.** Partly done — the hero now leads with *"If your income
    stopped today, what breaks first?"* and the tool is featured first in the
    grid. Still worth a full pass on the how-it-works section and the email
    capture, which still speak to the old five-calculator framing.
 4. **Open-source the repo** so the privacy claim is verifiable rather than
-   asserted.
+   asserted. This is now the single highest-value remaining move: Layer 3's
+   whole pitch is "we cannot see your data", and an auditable repo is what turns
+   that from a claim into a fact.
+5. **Finish the landing page.** The how-it-works section and email capture still
+   speak to the old five-calculator framing.
+6. **Resolve monetization** (see §6.4) before investing further.
 
 ---
 

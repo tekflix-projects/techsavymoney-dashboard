@@ -142,6 +142,138 @@
     return render;
   };
 
+  /* ── 1c. Shareable scenarios (Layer 3) ─────────────────────────
+   * The link carries the figures in its fragment, so nothing is stored
+   * and no account is needed. That also means the link *is* the data —
+   * which the UI says out loud rather than burying. */
+
+  const buildShareLink = async () => {
+    const token = await window.TSM.encodeScenario();
+    const base = location.origin + location.pathname;
+    return `${base}#s=${token}`;
+  };
+
+  const copyToClipboard = async (text, field) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // Clipboard API needs a secure context and a user gesture; falling
+      // back to a selection lets the user hit Cmd-C themselves.
+      field?.select?.();
+      return false;
+    }
+  };
+
+  const mountShare = (panel) => {
+    const wrap = el('div', { class: 'tsm-share' });
+    const button = el('button', { type: 'button', class: 'tsm-share-btn' }, 'Share this scenario');
+    const out = el('div', { class: 'tsm-share-out', hidden: 'hidden' });
+    wrap.append(button, out);
+
+    button.addEventListener('click', async () => {
+      if (window.TSM.filledCount() === 0) {
+        out.hidden = false;
+        out.replaceChildren(el('p', { class: 'tsm-share-note',
+          text: 'Enter some numbers first — there is nothing to share yet.' }));
+        return;
+      }
+      button.disabled = true;
+      button.textContent = 'Building link…';
+      try {
+        const url = await buildShareLink();
+        const field = el('input', { class: 'tsm-share-field', readonly: 'readonly', value: url });
+        const copied = await copyToClipboard(url, field);
+        out.hidden = false;
+        out.replaceChildren(
+          el('p', { class: 'tsm-share-note' },
+            el('strong', { text: copied ? 'Link copied. ' : 'Press Cmd/Ctrl-C to copy. ' }),
+            'It carries your figures inside it, so anyone you send it to can see them. ',
+            'The part after the # is never sent to a server — not ours, not anyone\u2019s.'),
+          field,
+        );
+        field.focus();
+        field.select();
+      } catch (err) {
+        console.error('[TSM] share failed', err);
+        out.hidden = false;
+        out.replaceChildren(el('p', { class: 'tsm-share-note',
+          text: 'Could not build a link in this browser.' }));
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Share this scenario';
+      }
+    });
+
+    panel.append(wrap);
+  };
+
+  /** Read an incoming #s= scenario, then strip it from the address bar. */
+  const readIncomingScenario = async () => {
+    const match = /[#&]s=([A-Za-z0-9_-]+)/.exec(location.hash);
+    if (!match) return null;
+    const scenario = await window.TSM.decodeScenario(match[1]);
+    // Clear the fragment either way: a stale token in the URL would be
+    // re-applied on every reload and shoulder-surfs in the address bar.
+    history.replaceState(null, '', location.pathname + location.search);
+    return scenario;
+  };
+
+  const showScenarioBanner = (scenario, applied) => {
+    const anchor = document.querySelector('[data-tsm-banner]')
+      ?? document.querySelector('.tool-header')
+      ?? document.querySelector('.container');
+    if (!anchor) return;
+
+    const banner = el('div', { class: 'tsm-banner tsm-banner-share', role: 'status' },
+      el('span', { class: 'tsm-banner-icon', 'aria-hidden': 'true' }, '\u2197'),
+      el('span', { class: 'tsm-banner-text' },
+        el('strong', { text: applied ? 'Viewing a shared scenario. ' : 'Someone shared a scenario with you. ' }),
+        applied
+          ? 'These figures came from the link you opened, not from us.'
+          : 'Loading it will replace the numbers you already have here.'),
+    );
+
+    if (!applied) {
+      banner.append(
+        el('button', { type: 'button', class: 'tsm-banner-undo',
+          onClick: () => { window.TSM.replace(scenario); location.reload(); } }, 'Load it'),
+        el('button', { type: 'button', class: 'tsm-banner-close', 'aria-label': 'Dismiss',
+          onClick: () => banner.remove() }, '\u00D7'),
+      );
+    } else {
+      banner.append(el('button', { type: 'button', class: 'tsm-banner-close',
+        'aria-label': 'Dismiss', onClick: () => banner.remove() }, '\u00D7'));
+    }
+    anchor.after(banner);
+  };
+
+  /** Apply an incoming scenario, or offer it if there is work to protect. */
+  const applyIncoming = (scenario) => {
+    const hadData = window.TSM.filledCount() > 0;
+    if (hadData) {
+      showScenarioBanner(scenario, false);
+      return false;
+    }
+    window.TSM.replace(scenario);
+    window.TSM.hydrate();
+    window.update?.();
+    showScenarioBanner(scenario, true);
+    return true;
+  };
+
+  /* Pasting a share link while already on the site changes only the
+     fragment, and a fragment-only navigation does not reload the page —
+     so the load-time path would never see it. Catch it here too. */
+  window.addEventListener('hashchange', async () => {
+    try {
+      const scenario = await readIncomingScenario();
+      if (scenario) applyIncoming(scenario);
+    } catch (err) {
+      console.error('[TSM] could not read shared scenario', err);
+    }
+  });
+
   /* ── 2. Privacy control ────────────────────────────────────────── */
 
   let refreshPanel = () => {};
@@ -250,8 +382,20 @@
 
   /* ── 3. Boot ───────────────────────────────────────────────────── */
 
-  const init = () => {
+  const init = async () => {
     if (TOOL) window.TSM.markTool(TOOL);
+
+    // A shared link is resolved first: if this browser is empty we adopt
+    // it outright, otherwise we ask rather than overwriting their work.
+    let incoming = null;
+    try {
+      incoming = await readIncomingScenario();
+    } catch (err) {
+      console.error('[TSM] could not read shared scenario', err);
+    }
+    // Adopted before hydration below, so the tool's fields fill from it.
+    const adopted = incoming ? window.TSM.filledCount() === 0 : false;
+    if (incoming && adopted) window.TSM.replace(incoming);
 
     // Let each tool adapt before generic hydration (the debt tool seeds
     // its rows here), then fill whatever is still empty.
@@ -260,14 +404,16 @@
     const filled = window.TSM.hydrate();
     if (filled.length > 0) {
       window.update?.();          // recompute once, not once per field
-      showPrefillBanner(filled);
+      if (!incoming) showPrefillBanner(filled);
     }
+    if (incoming) showScenarioBanner(incoming, adopted);
 
     const anchor = document.querySelector('[data-tsm-banner]')
       ?? document.querySelector('.tool-header');
     const renderSummary = anchor ? mountSummary(anchor) : () => {};
 
     document.body.append(buildPrivacyBar());
+    for (const slot of document.querySelectorAll('[data-tsm-share]')) mountShare(slot);
 
     // Keep the pill and strip honest as the user types, without thrashing.
     // Deliberately a timer rather than requestAnimationFrame: rAF is paused

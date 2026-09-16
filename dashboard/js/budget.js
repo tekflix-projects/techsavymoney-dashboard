@@ -1,24 +1,24 @@
 /* ─── Budget Breakdown Calculator ────────────────────────────── */
 
 const EXPENSE_CATEGORIES = [
-  { id: 'housing',       label: 'Rent / Mortgage',    color: '#0F1F3D', group: 'needs' },
-  { id: 'utilities',     label: 'Utilities',           color: '#1A3460', group: 'needs' },
-  { id: 'internet',      label: 'Internet & Phone',    color: '#2A4A80', group: 'needs' },
-  { id: 'groceries',     label: 'Groceries',           color: '#00B4A2', group: 'needs' },
-  { id: 'health',        label: 'Health / Medical',    color: '#009688', group: 'needs' },
-  { id: 'carPayment',    label: 'Car Payment',         color: '#33C9B8', group: 'needs' },
-  { id: 'gas',           label: 'Gas & Parking',       color: '#66D9CC', group: 'needs' },
-  { id: 'debtPayments',  label: 'Debt Payments',       color: '#3A5A9A', group: 'needs' },
-  { id: 'dining',        label: 'Dining Out',          color: '#F59E0B', group: 'wants' },
-  { id: 'coffee',        label: 'Coffee & Drinks',     color: '#FBBF24', group: 'wants' },
-  { id: 'transit',       label: 'Transit / Rideshare', color: '#FCD34D', group: 'wants' },
-  { id: 'subscriptions', label: 'Subscriptions',       color: '#FDE68A', group: 'wants' },
-  { id: 'entertainment', label: 'Entertainment',       color: '#F97316', group: 'wants' },
-  { id: 'shopping',      label: 'Shopping',            color: '#FB923C', group: 'wants' },
-  { id: 'gym',           label: 'Gym & Fitness',       color: '#FDBA74', group: 'wants' },
-  { id: 'personal',      label: 'Personal Care',       color: '#FED7AA', group: 'wants' },
-  { id: 'savingsContrib',label: 'Savings',             color: '#10B981', group: 'savings' },
-  { id: 'otherExpenses', label: 'Other',               color: '#6B7280', group: 'other' },
+  { id: 'housing',       label: 'Rent / Mortgage',    color: '#2F6F8F', group: 'needs' },
+  { id: 'utilities',     label: 'Utilities',           color: '#4C89A6', group: 'needs' },
+  { id: 'internet',      label: 'Internet & Phone',    color: '#6BA2BB', group: 'needs' },
+  { id: 'groceries',     label: 'Groceries',           color: '#0E9C84', group: 'needs' },
+  { id: 'health',        label: 'Health / Medical',    color: '#2FA38C', group: 'needs' },
+  { id: 'carPayment',    label: 'Car Payment',         color: '#57B79F', group: 'needs' },
+  { id: 'gas',           label: 'Gas & Parking',       color: '#82CBB6', group: 'needs' },
+  { id: 'debtPayments',  label: 'Debt Payments',       color: '#8FBACE', group: 'needs' },
+  { id: 'dining',        label: 'Dining Out',          color: '#D68C2A', group: 'wants' },
+  { id: 'coffee',        label: 'Coffee & Drinks',     color: '#E0A33C', group: 'wants' },
+  { id: 'transit',       label: 'Transit / Rideshare', color: '#E8B862', group: 'wants' },
+  { id: 'subscriptions', label: 'Subscriptions',       color: '#EECE90', group: 'wants' },
+  { id: 'entertainment', label: 'Entertainment',       color: '#C2705E', group: 'wants' },
+  { id: 'shopping',      label: 'Shopping',            color: '#CE8878', group: 'wants' },
+  { id: 'gym',           label: 'Gym & Fitness',       color: '#DBA294', group: 'wants' },
+  { id: 'personal',      label: 'Personal Care',       color: '#E7BCB1', group: 'wants' },
+  { id: 'savingsContrib',label: 'Savings',             color: '#7C9A5E', group: 'savings' },
+  { id: 'otherExpenses', label: 'Other',               color: '#8A8578', group: 'other' },
 ];
 
 let budgetChart = null;
@@ -101,7 +101,6 @@ function renderChart(expenses, totalExp) {
         data: expenses.map(e => e.amount),
         backgroundColor: expenses.map(e => e.color),
         borderWidth: 2,
-        borderColor: '#fff',
         hoverOffset: 6,
       }]
     },
@@ -195,9 +194,9 @@ function render502030(expenses, income) {
   const savingsPct = (savingsAmt / income) * 100;
 
   const rows = [
-    { label: 'Needs (essentials)',  actual: needsPct,   target: 50, amount: needsAmt,   color: '#0F1F3D' },
-    { label: 'Wants (lifestyle)',   actual: wantsPct,   target: 30, amount: wantsAmt,   color: '#F59E0B' },
-    { label: 'Savings / Debt',      actual: savingsPct, target: 20, amount: savingsAmt, color: '#10B981' },
+    { label: 'Needs (essentials)',  actual: needsPct,   target: 50, amount: needsAmt,   color: '#2F6F8F' },
+    { label: 'Wants (lifestyle)',   actual: wantsPct,   target: 30, amount: wantsAmt,   color: '#D68C2A' },
+    { label: 'Savings / Debt',      actual: savingsPct, target: 20, amount: savingsAmt, color: '#7C9A5E' },
   ];
 
   container.innerHTML = '';
@@ -220,7 +219,7 @@ function render502030(expenses, income) {
         <span>$${r.amount.toLocaleString()} · <strong style="color:var(--text)">${r.actual.toFixed(0)}%</strong> of income</span>
         <span>Target: ${r.target}%</span>
       </div>
-      <div class="progress-bar" style="background:#f0f2f8;">
+      <div class="progress-bar" style="background:var(--surface-3);">
         <div class="progress-fill" style="width:${Math.min(100, r.actual)}%; background:${over ? 'var(--amber)' : r.color};"></div>
       </div>
       <div style="position:relative; margin-top:-8px; height:8px;">

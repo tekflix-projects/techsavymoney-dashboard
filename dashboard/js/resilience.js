@@ -493,10 +493,10 @@ function renderChart(result) {
       labels,
       datasets: [
         { label: 'Cash on hand', data: series.map((p) => p.cash),
-          borderColor: '#00B4A2', backgroundColor: 'rgba(0,180,162,0.12)',
+          borderColor: '#0E9C84', backgroundColor: 'rgba(14,156,132,0.14)',
           borderWidth: 2.5, tension: 0.25, fill: true, pointRadius: 0, pointHoverRadius: 5 },
         { label: 'Credit still available', data: series.map((p) => p.headroom),
-          borderColor: '#F59E0B', backgroundColor: 'rgba(245,158,11,0.10)',
+          borderColor: '#D68C2A', backgroundColor: 'rgba(214,140,42,0.10)',
           borderWidth: 2.5, tension: 0.25, fill: true, pointRadius: 0, pointHoverRadius: 5,
           borderDash: [5, 4] },
       ],
@@ -505,8 +505,8 @@ function renderChart(result) {
       responsive: true,
       interaction: { mode: 'index', intersect: false },
       scales: {
-        x: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { maxTicksLimit: 10, font: { size: 11 } } },
-        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.04)' },
+        x: { ticks: { maxTicksLimit: 10, font: { size: 11 } } },
+        y: { beginAtZero: true,
              ticks: { font: { size: 11 },
                       callback: (v) => '$' + (v >= 1000 ? (v / 1000).toFixed(0) + 'k' : v) } },
       },
