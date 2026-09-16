@@ -49,7 +49,9 @@
       creditCards: null, personalLoans: null, otherLiabilities: null,
     },
     debts: [],                                     // [{name, balance, rate, minPayment}]
-    card:  { balance: null, apr: null, minPayment: null },
+    card:  { balance: null, apr: null, minPayment: null, limit: null },
+    // Inputs specific to the resilience engine's income-shock scenario.
+    shock: { continuingIncome: null, continuingMonths: null },
     assumptions: { returnRate: null, debtRate: null },
     meta: { updatedAt: null, tools: {} },
   });

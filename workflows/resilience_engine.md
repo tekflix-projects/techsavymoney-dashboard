@@ -1,6 +1,6 @@
 # Workflow — The Resilience Engine
 
-**Status:** Layer 1 shipped · Layer 2 specified, not built · Layer 3 specified, not built
+**Status:** Layers 1 and 2 shipped · Layer 3 specified, not built
 **Owner:** Mike
 **Last updated:** 2026-09-16
 
@@ -64,7 +64,7 @@ is just keeping the promise the homepage already made.
 
 Necessary, but on its own not a reason to evangelize. See §4 for what was built.
 
-### Layer 2 — The hook: "What breaks first?" ⬜ NOT BUILT
+### Layer 2 — The hook: "What breaks first?" ✅ SHIPPED
 
 > **If your income stopped today, how long until something breaks — and what
 > breaks first?**
@@ -234,16 +234,95 @@ Net Worth → Credit Card → Debt Payoff → Budget, with a realistic picture:
 
 ---
 
+## 4b. Layer 2 — what was actually built
+
+`dashboard/resilience.html` + `dashboard/js/resilience.js`, linked first in the
+nav and featured on the landing page.
+
+### The simulation
+
+`simulate()` is **pure** — same input, same result, and it never touches the DOM.
+That is what lets the leverage ranking re-run it a dozen-plus times per edit
+without anything flickering.
+
+Each month it: accrues card interest → drains cash buckets **in order**
+(checking, then savings, then emergency) → draws on remaining credit headroom →
+records a shortfall the moment neither can cover the gap. Event timings are
+fractional within the month (`Month 2.4`), computed from how far through that
+month's burn the bucket actually emptied.
+
+**Deliberate modelling choices, all surfaced in the UI rather than hidden:**
+
+- **Retirement accounts are excluded from cash.** Early withdrawal costs roughly
+  a third in tax and penalty. Treating a 401k as month-three money is how a shock
+  becomes a permanent setback.
+- **Savings contributions are excluded from burn.** Nobody keeps funding a 401k
+  while unemployed, so counting it would understate the runway.
+- **Debt minimums come from the payoff tool when it has them, otherwise from the
+  budget's debt-payments line — never both**, or the same obligation is counted
+  twice.
+- **A credit limit below the current balance yields zero headroom.** That is a
+  data-entry slip, not available credit.
+
+### The cascade
+
+Consequence timings reflect how lenders generally behave: nothing reaches a
+credit bureau before 30 days; repossession and foreclosure processes typically
+open up around 90. What breaks *first* is whichever obligation carries the
+nearest hard consequence — housing, then the car, then debt minimums. The page
+states plainly that these are typical cases, not guarantees.
+
+### Leverage ranking
+
+The part nobody else does. Each candidate change is re-simulated against the
+user's real balance sheet and scored in **months of runway bought**, then ranked.
+Candidates: cutting each discretionary category, full austerity, a 0% balance
+transfer, a 20% housing reduction, and building a $1,000 / $2,500 buffer.
+
+Also reports **months bought per $100/mo given up**, so a small cut that punches
+above its weight can outrank a larger one. On the test household this surfaced a
+genuinely counterintuitive result: a $2,500 buffer buys more time (+0.5 mo) than
+cutting housing by 20% (+0.3 mo).
+
+Anything worth under ~3 days is filtered out; the top 6 are shown.
+
+### Verification
+
+14 assertions against the pure core run outside the browser
+(`scratchpad/engine-test.mjs`): burn composition, phase ordering, bucket drain
+order, monotonicity in cash, more cash and lower burn both extending runway, 0%
+APR beating 22%, a limit below balance yielding no headroom, income cover
+deferring the break, zero burn surviving the horizon, and label formatting.
+
+In-browser: baseline 3.4 months → 6.2 with six months of $2,400 benefits → 4.6
+with credit headroom removed. Empty, partial, zero-cushion, and wealthy
+(6.1 years) states all render correctly.
+
+### Bugs found and fixed during this build
+
+6. **Double render per keystroke** — the page had both inline `oninput="update()"`
+   handlers and a store subscription, so every edit rebuilt the chart twice and
+   the layout visibly jumped. Inline handlers removed; the store subscription is
+   now the single render path, debounced at 80ms.
+7. **Phantom credit phase** — the timeline claimed "you start living on the
+   credit card" even with no card and no limit. Now requires an actual draw.
+8. **Split source of truth** — three of this page's inputs were read from the
+   DOM while every other figure came from the store, so the two could drift
+   apart. All figures now come from the store.
+9. **"1 days"** — a zero runway rendered as `1 days`. Now "No cushion at all",
+   with correct day pluralisation below a week.
+
+---
+
 ## 5. Build sequence from here
 
-1. **Layer 2 — resilience engine.** The headline product. Start with the
-   cascading timeline; the leverage ranking is what makes it unique, so do not
-   ship without it.
+1. ~~**Layer 2 — resilience engine.**~~ ✅ Shipped.
 2. **Layer 3 — URL-fragment sharing.** Roughly 50 lines of compress+encode, and
    it is the growth loop.
-3. **Landing page rewrite.** The hook is not "net worth calculator". It is
-   *"How long could you survive without a paycheck? Four minutes, no signup, no
-   bank linking."*
+3. **Landing page.** Partly done — the hero now leads with *"If your income
+   stopped today, what breaks first?"* and the tool is featured first in the
+   grid. Still worth a full pass on the how-it-works section and the email
+   capture, which still speak to the old five-calculator framing.
 4. **Open-source the repo** so the privacy claim is verifiable rather than
    asserted.
 
