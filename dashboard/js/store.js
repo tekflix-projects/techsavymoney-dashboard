@@ -563,9 +563,10 @@
       this.#emit();
     }
 
-    /** Always 0. Present so the UI can display a number it reads from
-     *  the store rather than one hard-coded into the markup. */
-    get bytesSent() { return 0; }
+    /** Always 0, and structurally so: no code path sends a figure
+     *  anywhere. Exposed so the panel reads a real value rather than a
+     *  number hard-coded into the markup. */
+    get figuresSent() { return 0; }
   }
 
   /* ── Declarative DOM binding ───────────────────────────────────
@@ -651,7 +652,7 @@
     get mode() { return store.mode; },
     set mode(v) { store.mode = v; },
     get expiresAt() { return store.expiresAt; },
-    get bytesSent() { return store.bytesSent; },
+    get figuresSent() { return store.figuresSent; },
     clear: () => store.clear(),
     hydrate,
     toNumber,

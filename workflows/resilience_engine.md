@@ -461,6 +461,45 @@ speculation.
 
 ---
 
+## 4f. Usage counting
+
+Cloudflare Web Analytics, chosen over a first-party counter for zero
+maintenance. Free, cookieless, no fingerprinting.
+
+`dashboard/js/analytics.js` holds the beacon token in **one place**; empty means
+no beacon loads at all, which is the safe default. `navigator.doNotTrack` is
+respected rather than counted anyway.
+
+### Enabling it
+
+1. dash.cloudflare.com → **Web Analytics** → **Add a site** → `delightful-medovik-1983a8.netlify.app`
+2. Copy the `token` value out of the snippet Cloudflare shows.
+3. Paste it into `BEACON_TOKEN` in `dashboard/js/analytics.js`, commit, push.
+
+Reports live in Cloudflare's dashboard: views, referrers, countries, browsers.
+
+### The honesty rule — do not break this
+
+The site dares people to open DevTools and watch nothing leave. That dare has to
+stay winnable, so the privacy panel **names the beacon out loud** instead of
+burying it, and the copy changed to match reality:
+
+| Before | After |
+|---|---|
+| "Your data has never left this device" | "Your **numbers** never leave this device" |
+| "0 bytes sent" | "0 **figures** sent" |
+| "Nothing leaves." | "The only thing that leaves is that one page-view ping — none of your figures are in it." |
+
+`figuresSent` is structurally zero: no code path sends a figure anywhere. The
+panel reads that value rather than a number hard-coded into the markup, and the
+disclosure paragraph only renders when counting is actually switched on — so the
+page never claims something that is not currently true.
+
+**If analytics ever grows to send anything the user entered, the product's
+central claim breaks.** That is the whole moat. Don't.
+
+---
+
 ## 5. Build sequence from here
 
 1. ~~**Layer 2 — resilience engine.**~~ ✅ Shipped.
@@ -475,8 +514,9 @@ speculation.
    that from a claim into a fact.
 5. **Finish the landing page.** The how-it-works section and email capture still
    speak to the old five-calculator framing.
-6. **Instrument usage first** (see §4e) — privacy-respecting counts of which
-   tool gets opened. Everything below this line is speculation until then.
+6. ~~**Instrument usage first**~~ ✅ Wired (see §4f) — needs the Cloudflare token
+   pasted in to switch on. Everything below this line stays speculation until
+   there is real data.
 7. **Resolve monetization** (see §6.4) before investing further.
 
 ---

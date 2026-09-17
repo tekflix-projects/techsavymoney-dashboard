@@ -329,10 +329,13 @@
         count === 0 ? 'Private by default' : `${plural(count, 'figure')} · on this device only`;
       wrap.classList.toggle('has-data', count > 0);
 
+      const counting = window.TSMAnalytics?.enabled === true;
+
       panel.replaceChildren(
         el('div', { class: 'tsm-privacy-head' },
-          el('strong', { text: 'Your data has never left this device' }),
-          el('span', { class: 'tsm-privacy-bytes', text: `${window.TSM.bytesSent} bytes sent` }),
+          el('strong', { text: 'Your numbers never leave this device' }),
+          el('span', { class: 'tsm-privacy-bytes',
+                       text: `${window.TSM.figuresSent} figures sent` }),
         ),
         el('p', { class: 'tsm-privacy-copy' },
           count === 0
@@ -359,7 +362,7 @@
         ),
         remaining && mode === 'device'
           ? el('p', { class: 'tsm-privacy-expiry', text: `Auto-clears in ${remaining}.` })
-          : null,
+          : '',
         el('button', {
           type: 'button',
           class: 'tsm-privacy-clear',
@@ -374,9 +377,21 @@
             refreshPanel();
           },
         }, 'Erase everything now'),
+        // Named out loud. Burying this would turn the DevTools dare into
+        // a trap instead of an invitation.
+        counting
+          ? el('p', { class: 'tsm-privacy-note' },
+              `We count anonymous page views through ${window.TSMAnalytics.vendor} — no cookies, `
+              + 'no fingerprinting, no account — so we can tell which tools are worth building. '
+              + 'It records that a page was opened. Never what you typed into it.')
+          : '',
         el('p', { class: 'tsm-privacy-proof' },
-          'Not taking our word for it? Open DevTools → Network and use any tool. Nothing leaves.'),
+          counting
+            ? 'Check for yourself: open DevTools → Network and use any tool. The only thing that '
+              + 'leaves is that one page-view ping — none of your figures are in it.'
+            : 'Not taking our word for it? Open DevTools → Network and use any tool. Nothing leaves.'),
       );
+      mountShare(panel);
     };
 
     refreshPanel();

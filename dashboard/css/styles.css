@@ -1544,3 +1544,15 @@ textarea.error {
 }
 
 @media print { .feedback-btn, .feedback-overlay { display: none !important; } }
+
+/* Analytics disclosure inside the privacy panel */
+.tsm-privacy-note {
+  margin-top: 0.875rem;
+  padding: 0.625rem 0.75rem;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-size: 0.71875rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
