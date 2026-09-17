@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="light dark" />
-  <title>What Breaks First — TechSavyMoney</title>
-  <meta name="description" content="If your income stopped today, how long until something breaks — and what breaks first? A cascading timeline and the single change that buys you the most time. No signup, no bank linking." />
+  <title>Financial Runway — TechSavyMoney</title>
+  <meta name="description" content="Your financial runway: how many months you could cover everything if your income stopped, where it runs out, what gives way first, and the single change that extends it most. No signup, no bank linking." />
   <script>
     /* Applied before first paint so the page never flashes the wrong theme. */
     try {
@@ -19,13 +19,13 @@
   <link rel="stylesheet" href="css/styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
-<body data-tool="resilience">
+<body data-tool="runway">
 
   <nav class="navbar">
     <div class="container">
       <a href="index.html" class="nav-logo">TechSavy<span>Money</span></a>
       <div class="nav-links">
-        <a href="resilience.html" class="active">What Breaks First</a>
+        <a href="runway.html" class="active">Financial Runway</a>
         <a href="net-worth.html">Net Worth</a>
         <a href="budget.html">Budget</a>
         <a href="debt-payoff.html">Debt Payoff</a>
@@ -39,7 +39,7 @@
       <button class="nav-toggle" onclick="toggleNav()" aria-label="Toggle menu">&#9776;</button>
     </div>
     <div class="nav-mobile" id="mobileNav">
-      <a href="resilience.html">What Breaks First</a>
+      <a href="runway.html">Financial Runway</a>
       <a href="net-worth.html">Net Worth</a>
       <a href="budget.html">Budget Breakdown</a>
       <a href="debt-payoff.html">Debt Payoff</a>
@@ -55,8 +55,8 @@
         <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.5rem;">
           <a href="index.html" style="color:var(--text-muted); font-size:0.875rem;">← All Tools</a>
         </div>
-        <h1>What Breaks First</h1>
-        <p>If your income stopped today, how long until something breaks — and what breaks first? Every other tool here assumes things go according to plan. This one doesn't.</p>
+        <h1>Financial Runway</h1>
+        <p>How many months you could keep covering everything if your income stopped — and the single change that extends it most. Every other tool here assumes things go according to plan. This one doesn't.</p>
       </div>
 
       <div class="tool-layout">
@@ -69,7 +69,7 @@
               <h3>🎯 The Scenario</h3>
             </div>
             <div class="card-body">
-              <p class="resilience-muted" style="margin-bottom:1.25rem;">
+              <p class="runway-muted" style="margin-bottom:1.25rem;">
                 Your cash, spending, and debts come from the other tools. Two more
                 numbers sharpen the picture.
               </p>
@@ -126,7 +126,7 @@
         <!-- ── Right: the answer ── -->
         <div class="panel">
 
-          <div id="resilienceEmpty" class="card">
+          <div id="runwayEmpty" class="card">
             <div class="card-body">
               <div class="empty-state">
                 <p style="font-size:1.0625rem; font-weight:600; color:var(--navy); margin-bottom:0.5rem;">
@@ -135,27 +135,27 @@
                 <p>
                   Add your cash in <a href="net-worth.html">Net Worth</a> and your spending in
                   <a href="budget.html">Budget</a> — takes about four minutes — and your
-                  timeline builds itself here.
+                  runway works itself out here.
                 </p>
               </div>
             </div>
           </div>
 
-          <div id="resilienceResults" class="hidden">
+          <div id="runwayResults" class="hidden">
 
-            <div class="card resilience-headline">
+            <div class="card runway-headline">
               <div class="card-body" style="text-align:center;">
-                <p class="stat-label">You can cover everything for</p>
-                <div class="resilience-big" id="runwayBig">—</div>
+                <p class="stat-label">Your runway</p>
+                <div class="runway-big" id="runwayBig">—</div>
                 <span class="badge badge-navy" id="runwayBadge">&nbsp;</span>
-                <p class="resilience-sub" id="runwaySub"></p>
+                <p class="runway-sub" id="runwaySub"></p>
                 <div data-tsm-share></div>
               </div>
             </div>
 
             <div class="card">
               <div class="card-header">
-                <h3>⏱ The Cascade</h3>
+                <h3>⏱ How It Plays Out</h3>
               </div>
               <div class="card-body">
                 <div id="timeline" class="timeline"></div>
@@ -170,13 +170,13 @@
 
             <div class="card">
               <div class="card-header">
-                <h3>⚡ Highest Leverage</h3>
-                <span class="badge badge-teal">Months bought</span>
+                <h3>⚡ What Extends It Most</h3>
+                <span class="badge badge-teal">Months gained</span>
               </div>
               <div class="card-body">
-                <p class="resilience-muted" style="margin-bottom:1.25rem;">
+                <p class="runway-muted" style="margin-bottom:1.25rem;">
                   Every change below was re-simulated against <em>your</em> numbers and
-                  ranked by how much time it actually buys — not by how much it saves.
+                  ranked by how much runway it actually buys — not by how much it saves.
                 </p>
                 <div id="leverage"></div>
               </div>
@@ -203,7 +203,7 @@
       <div class="footer-inner">
         <a href="index.html" class="footer-logo">TechSavy<span>Money</span></a>
         <div class="footer-links">
-          <a href="resilience.html">What Breaks First</a>
+          <a href="runway.html">Financial Runway</a>
           <a href="net-worth.html">Net Worth</a>
           <a href="budget.html">Budget</a>
           <a href="debt-payoff.html">Debt Payoff</a>
@@ -218,7 +218,7 @@
   <script src="js/theme.js"></script>
   <script src="js/store.js"></script>
   <script src="js/chart-theme.js"></script>
-  <script src="js/resilience.js"></script>
+  <script src="js/runway.js"></script>
   <script src="js/feedback.js"></script>
   <script src="js/tsm-ui.js"></script>
   <script>function toggleNav() { document.getElementById('mobileNav').classList.toggle('open'); }</script>

@@ -1,9 +1,13 @@
-/* ─── The Resilience Engine ──────────────────────────────────────
+/* ─── The Runway Engine ──────────────────────────────────────────
  *
  * Layer 2. Answers the question no other free tool answers:
  *
- *   If your income stopped today, how long until something breaks —
- *   and what breaks first?
+ *   How many months could you keep covering everything if the income
+ *   stopped — and what gives way first when it runs out?
+ *
+ * Framed as runway rather than catastrophe on purpose. It is the same
+ * arithmetic either way, but a number you can be proud of is one people
+ * will actually look at, and share.
  *
  * Everything else on this site is a rearview mirror or an optimistic
  * projection. This models the downside: cash drains in a real order,
@@ -51,7 +55,7 @@ const stateNum = (v) => (Number.isFinite(Number(v)) ? Number(v) : 0);
 /** Months as something a person can act on: "5.9 months", "3 weeks". */
 function monthsLabel(months) {
   if (months === null) return '10+ years';
-  if (months <= 0) return 'No cushion at all';
+  if (months <= 0) return 'No runway at all';
   if (months < 1) {
     const weeks = months * 4.345;
     if (weeks < 1) {
@@ -366,17 +370,17 @@ function renderHeadline(input, result) {
   bigEl.textContent = monthsLabel(months);
 
   if (months === null) {
-    bigEl.className = 'resilience-big positive';
+    bigEl.className = 'runway-big positive';
     badge.className = 'badge badge-green';
-    badge.textContent = 'Very resilient';
+    badge.textContent = 'Exceptional runway';
     subEl.textContent = 'Your cash outlasts a 10-year income stop at your current spending.';
     return;
   }
 
-  bigEl.className = 'resilience-big ' + (months >= 6 ? 'positive' : months >= 3 ? 'caution' : 'negative');
-  if (months >= 6) { badge.className = 'badge badge-green'; badge.textContent = 'Solid cushion'; }
-  else if (months >= 3) { badge.className = 'badge badge-amber'; badge.textContent = 'Thin cushion'; }
-  else { badge.className = 'badge badge-red'; badge.textContent = 'Fragile'; }
+  bigEl.className = 'runway-big ' + (months >= 6 ? 'positive' : months >= 3 ? 'caution' : 'negative');
+  if (months >= 6) { badge.className = 'badge badge-green'; badge.textContent = 'Strong runway'; }
+  else if (months >= 3) { badge.className = 'badge badge-amber'; badge.textContent = 'Thin runway'; }
+  else { badge.className = 'badge badge-red'; badge.textContent = 'Critically short'; }
 
   subEl.innerHTML = `That's around <strong>${monthStamp(months)}</strong> before the first bill goes unpaid — `
     + `burning <strong>${money(result.burn)}/mo</strong> with `
@@ -431,7 +435,7 @@ function renderLeverage(options) {
 
   if (options.length === 0) {
     const empty = document.createElement('p');
-    empty.className = 'resilience-muted';
+    empty.className = 'runway-muted';
     empty.textContent = 'Add your spending in the Budget tool to see which single change buys you the most time.';
     container.append(empty);
     return;
@@ -566,8 +570,8 @@ function update() {
   const hasBurn = (input.essential + input.discretionary + input.debtMinimums) > 0;
   const ready = hasCash || hasBurn;
 
-  document.getElementById('resilienceEmpty').classList.toggle('hidden', ready);
-  document.getElementById('resilienceResults').classList.toggle('hidden', !ready);
+  document.getElementById('runwayEmpty').classList.toggle('hidden', ready);
+  document.getElementById('runwayResults').classList.toggle('hidden', !ready);
   if (!ready) return;
 
   if (!hasBurn) {

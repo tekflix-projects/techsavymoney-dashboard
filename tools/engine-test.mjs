@@ -1,8 +1,8 @@
-// Exercise the resilience engine's pure simulation core outside the browser.
+// Exercise the runway engine's pure simulation core outside the browser.
 // Run from anywhere:  node tools/engine-test.mjs
 import fs from 'node:fs';
 const here = new URL('.', import.meta.url).pathname;
-const src = fs.readFileSync(here + '../dashboard/js/resilience.js', 'utf8');
+const src = fs.readFileSync(here + '../dashboard/js/runway.js', 'utf8');
 // Strip the DOM-bound half; keep the maths.
 const core = src.slice(0, src.indexOf('/* ── Rendering'))
   .replace(/document\.addEventListener[\s\S]*$/, '')

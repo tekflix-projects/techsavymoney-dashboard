@@ -1164,22 +1164,22 @@ input.tsm-prefilled {
 
 /* ═══ Resilience engine (Layer 2) ═════════════════════════════════ */
 
-.resilience-muted { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
+.runway-muted { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
 
-.resilience-headline {
+.runway-headline {
   position: relative;
   overflow: hidden;
   border-color: var(--line-strong);
   box-shadow: var(--shadow);
 }
-.resilience-headline::before {
+.runway-headline::before {
   content: '';
   position: absolute;
   inset: 0 0 auto 0;
   height: 3px;
   background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 40%, var(--warn)));
 }
-.resilience-big {
+.runway-big {
   font-family: var(--font-display);
   font-variation-settings: 'SOFT' 0, 'WONK' 0;
   font-size: clamp(2.75rem, 1.8rem + 4.2vw, 4.25rem);
@@ -1190,10 +1190,10 @@ input.tsm-prefilled {
   font-variant-numeric: tabular-nums;
   color: var(--ink);
 }
-.resilience-big.positive { color: var(--pos); }
-.resilience-big.caution  { color: var(--warn); }
-.resilience-big.negative { color: var(--neg); }
-.resilience-sub {
+.runway-big.positive { color: var(--pos); }
+.runway-big.caution  { color: var(--warn); }
+.runway-big.negative { color: var(--neg); }
+.runway-sub {
   font-size: 0.9375rem;
   line-height: 1.62;
   color: var(--muted);

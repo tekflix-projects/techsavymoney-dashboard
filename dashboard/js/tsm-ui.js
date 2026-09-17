@@ -112,7 +112,10 @@
       items.push(['Monthly surplus', money(d.surplus), d.surplus >= 0 ? 'positive' : 'negative']);
     }
     if (d.runwayMonths != null && d.liquid > 0) {
-      items.push(['Savings runway', `${d.runwayMonths.toFixed(1)} mo`, null]);
+      // Deliberately not called "runway": the Financial Runway tool reports a
+      // different, larger figure because it also counts credit headroom and
+      // debt minimums. Two numbers under one name would just confuse.
+      items.push(['Savings cover', `${d.runwayMonths.toFixed(1)} mo`, null]);
     }
     if (d.debtMinimums > 0) {
       items.push(['Debt minimums', `${money(d.debtMinimums)}/mo`, null]);

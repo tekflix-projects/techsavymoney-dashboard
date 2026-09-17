@@ -1,3 +1,11 @@
 [build]
   publish = "dashboard"
   command = ""
+
+# The runway tool shipped briefly as /resilience.html. Any link already
+# in the wild — including a shared scenario, whose fragment survives a
+# redirect — should still land in the right place.
+[[redirects]]
+  from = "/resilience.html"
+  to = "/runway.html"
+  status = 301

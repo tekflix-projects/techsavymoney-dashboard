@@ -1,6 +1,8 @@
-# Workflow — The Resilience Engine
+# Workflow — The Runway Engine
 
-**Status:** All three layers shipped · site redesigned 2026-09-16
+*(Shipped first as "What Breaks First"; renamed to **Financial Runway** 2026-09-16 — see §4e.)*
+
+**Status:** All three layers shipped · site redesigned and tool renamed 2026-09-16
 **Owner:** Mike
 **Last updated:** 2026-09-16
 
@@ -390,6 +392,75 @@ would have meant touching every file for no benefit.
 
 ---
 
+## 4e. The reframe: "What Breaks First" → "Financial Runway"
+
+Renamed after an honest challenge to the original premise. Worth recording
+**why**, because the critique still stands and should shape what happens next.
+
+### What the original framing got wrong
+
+The Gap B argument in §2 — "nobody models the downside" — was an observation
+about **supply**, and it was treated as though it proved **demand**. An empty
+space can be empty because nobody wants to stand there. Specifically:
+
+1. **People avoid this question.** Financial anxiety produces avoidance, not
+   engagement. "How long until I'm broke" is exactly what people don't want
+   answered, and tools that make you feel bad don't get reopened.
+2. **The shareability claim was probably backwards.** Nobody forwards "I'd be
+   broke in 3.4 months" — it is financially intimate and embarrassing. People
+   share aspirational things. Layer 3's growth loop rested on this assumption.
+3. **Emergency-fund calculators are closer competition than admitted.**
+   `savings ÷ expenses` answers the same question at ~80% fidelity and prompts
+   the *same decision*: save more.
+4. **The precision is partly false.** Nobody burns their normal spending for six
+   unemployed months; they cut, borrow, take any job.
+5. **It is single-use.** You learn your number once — weak retention, weak
+   monetization.
+6. **Small leverage numbers can demotivate.** "+0.7 months" is meant to read as
+   "your best move"; it can read as "nothing I do matters."
+
+### What the rename fixes, and what it does not
+
+Runway is the same arithmetic in a register people use **without shame** —
+startups quote runway proudly. "I have 8 months of runway" is a status, not a
+confession, which is the one thing that could make Layer 3's sharing loop work.
+
+It does **not** fix retention, single-use, or monetization. Those remain open.
+
+### What changed
+
+`resilience.html` → `runway.html` (301 redirect kept in `netlify.toml`, so
+existing share links still resolve — a fragment survives a redirect).
+`js/resilience.js` → `js/runway.js`, and the `.resilience-*` classes likewise.
+
+Copy moved from catastrophe to capacity: the landing hero now reads *"Your money
+has a runway. How long is yours?"*, status badges are "Strong / Thin /
+Critically short runway", and the sections are "How It Plays Out" and "What
+Extends It Most".
+
+**The cascade and the "This breaks first" flag were kept.** They are still the
+sharp, differentiating insight — they are just no longer the brand. The rename
+changes what the tool is *called* and *sold as*, not what it computes.
+
+One collision the rename introduced and fixed: the cross-tool summary strip said
+"Savings runway", a *different and smaller* figure than the tool's runway (it
+ignores credit headroom and debt minimums). Relabelled "Savings cover".
+
+### The real recommendation
+
+The strongest honest differentiator may not be the runway engine at all — it may
+be **Layer 1**: *"the only whole-picture financial tool that doesn't want your
+bank login"*. That is true, verifiable, and useful to someone in good financial
+shape as well as bad. Runway is likely a **hook**, not the product.
+
+**Do not invest further — especially in monetization — until there is usage
+data.** The feedback widget is now on all seven pages. Add lightweight,
+privacy-respecting counts of which tool gets opened, ship it, and let a few
+hundred visitors settle this. That is a week of real signal versus more
+speculation.
+
+---
+
 ## 5. Build sequence from here
 
 1. ~~**Layer 2 — resilience engine.**~~ ✅ Shipped.
@@ -404,7 +475,9 @@ would have meant touching every file for no benefit.
    that from a claim into a fact.
 5. **Finish the landing page.** The how-it-works section and email capture still
    speak to the old five-calculator framing.
-6. **Resolve monetization** (see §6.4) before investing further.
+6. **Instrument usage first** (see §4e) — privacy-respecting counts of which
+   tool gets opened. Everything below this line is speculation until then.
+7. **Resolve monetization** (see §6.4) before investing further.
 
 ---
 

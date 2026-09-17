@@ -50,7 +50,7 @@
     },
     debts: [],                                     // [{name, balance, rate, minPayment}]
     card:  { balance: null, apr: null, minPayment: null, limit: null },
-    // Inputs specific to the resilience engine's income-shock scenario.
+    // Inputs specific to the runway engine's income-shock scenario.
     shock: { continuingIncome: null, continuingMonths: null },
     assumptions: { returnRate: null, debtRate: null },
     meta: { updatedAt: null, tools: {} },
@@ -512,7 +512,7 @@
         liquid,
         debtMinimums,
         // Months of expenses covered by liquid savings — the input the
-        // resilience engine (Layer 2) will build its timeline from.
+        // runway engine (Layer 2) will build its timeline from.
         runwayMonths: totalExpenses > 0 ? liquid / totalExpenses : null,
       });
     }
